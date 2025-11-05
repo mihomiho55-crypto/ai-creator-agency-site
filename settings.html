@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>設定 | Creator Agency</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- サイドバー -->
+  <nav class="sidebar">
+    <div class="logo-container">
+      <div class="logo-icon">AI</div>
+      <div class="logo">Creator Agency</div>
+    </div>
+    <div class="nav-menu">
+      <a href="index.html" class="nav-item">
+        <i class="material-icons-round">dashboard</i><span>ダッシュボード</span>
+      </a>
+      <a href="sns-marketing.html" class="nav-item">
+        <i class="material-icons-round">tag</i><span>SNSマーケティング</span>
+      </a>
+      <a href="content-scheduler.html" class="nav-item">
+        <i class="material-icons-round">edit</i><span>コンテンツ作成</span>
+      </a>
+      <a href="seminar-management.html" class="nav-item">
+        <i class="material-icons-round">event</i><span>セミナー管理</span>
+      </a>
+      <a href="course-content.html" class="nav-item">
+        <i class="material-icons-round">video_library</i><span>講座コンテンツ</span>
+      </a>
+      <a href="student-management.html" class="nav-item">
+        <i class="material-icons-round">people</i><span>受講生管理</span>
+      </a>
+      <div class="nav-section-title">アカウント</div>
+      <a href="revenue-management.html" class="nav-item">
+        <i class="material-icons-round">payments</i><span>売上・支払い管理</span>
+      </a>
+      <a href="settings.html" class="nav-item active">
+        <i class="material-icons-round">settings</i><span>設定</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- メイン -->
+  <main class="main-content" id="settingsRoot">
+    <div class="header">
+      <h1 class="page-title">設定</h1>
+      <div class="d-flex gap-2">
+        <button class="btn btn-outline-secondary btn-sm" id="stgResetBtn">リセット</button>
+        <button class="btn btn-primary btn-sm btn-primary" id="stgSaveBtn">保存する</button>
+      </div>
+    </div>
+
+    <!-- プロフィール / 組織・地域設定 / テーマ -->
+    <div class="dashboard-grid">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">プロフィール</div>
+        </div>
+        <div class="row g-3">
+          <div class="col-md-3">
+            <div class="user-avatar" id="stgAvatarPreview" style="width:64px;height:64px;font-size:20px;">TS</div>
+          </div>
+          <div class="col-md-9">
+            <label class="form-label">氏名</label>
+            <input type="text" class="form-control form-input" id="stgName" placeholder="例）桜井 美帆"/>
+            <label class="form-label mt-3">メール</label>
+            <input type="email" class="form-control form-input" id="stgEmail" placeholder="you@example.com"/>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><div class="card-title">組織・地域設定</div></div>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">ブランド名 / 組織名</label>
+            <input type="text" class="form-control form-input" id="stgOrg" placeholder="例）Medicina / SC®協会"/>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">言語</label>
+            <select id="stgLang" class="form-select form-input">
+              <option value="ja">日本語</option>
+              <option value="en">English</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">タイムゾーン</label>
+            <select id="stgTz" class="form-select form-input">
+              <option value="Asia/Dubai">Asia/Dubai (UTC+4)</option>
+              <option value="Asia/Tokyo">Asia/Tokyo (UTC+9)</option>
+              <option value="UTC">UTC</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">通貨</label>
+            <select id="stgCurrency" class="form-select form-input">
+              <option value="JPY">JPY（円）</option>
+              <option value="USD">USD（$）</option>
+              <option value="AED">AED（د.إ）</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><div class="card-title">テーマ</div></div>
+        <div class="d-flex gap-3 align-items-center">
+          <select id="stgTheme" class="form-select form-input" style="max-width:240px;">
+            <option value="auto">システムに合わせる</option>
+            <option value="light">ライト</option>
+            <option value="dark">ダーク</option>
+          </select>
+          <span class="text-muted" style="font-size:13px;">（ダークはモック切替。CSSテーマは将来拡張）</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SNS連携 / 通知 -->
+    <div class="dashboard-grid">
+      <div class="card">
+        <div class="card-header"><div class="card-title">SNS連携</div></div>
+        <div id="stgSocialList" class="row g-3">
+          <!-- JSで描画 -->
+        </div>
+        <div class="text-muted" style="font-size:12px;margin-top:8px;">
+          ※ボタンはモックです（実 OAuth は未接続）。状態はブラウザに保存されます。
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><div class="card-title">通知設定</div></div>
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" id="stgNotifyEmail">
+          <label class="form-check-label" for="stgNotifyEmail">メール通知（購入・予約・コメント）</label>
+        </div>
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" id="stgNotifyInapp" checked>
+          <label class="form-check-label" for="stgNotifyInapp">アプリ内通知</label>
+        </div>
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" id="stgNotifyWeekly">
+          <label class="form-check-label" for="stgNotifyWeekly">週間レポートを受け取る</label>
+        </div>
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" id="stgNotifyCritical" checked>
+          <label class="form-check-label" for="stgNotifyCritical">重要アラート（決済エラーなど）</label>
+        </div>
+        <button class="btn btn-secondary btn-sm" id="stgTestNotifyBtn">テスト通知（モック）</button>
+      </div>
+    </div>
+
+    <!-- セキュリティ / 請求情報 -->
+    <div class="dashboard-grid">
+      <div class="card">
+        <div class="card-header"><div class="card-title">セキュリティ</div></div>
+        <div class="row g-3">
+          <div class="col-md-12">
+            <label class="form-label">現在のパスワード</label>
+            <input type="password" class="form-control form-input" id="stgPwdCur" placeholder="••••••••"/>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">新しいパスワード</label>
+            <input type="password" class="form-control form-input" id="stgPwdNew" placeholder="8文字以上"/>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">新しいパスワード（確認）</label>
+            <input type="password" class="form-control form-input" id="stgPwdNew2" placeholder="もう一度入力"/>
+          </div>
+          <div class="col-md-12">
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" id="stg2fa">
+              <label class="form-check-label" for="stg2fa">2段階認証を有効化（モック）</label>
+            </div>
+            <button class="btn btn-outline-primary btn-sm" id="stgChangePwdBtn">パスワード変更（モック）</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><div class="card-title">請求情報（インボイス）</div></div>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">請求先名</label>
+            <input type="text" class="form-control form-input" id="stgBillName" placeholder="氏名 / 会社名"/>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">税番号 / インボイス番号</label>
+            <input type="text" class="form-control form-input" id="stgTaxId" placeholder="例）T1234567890123"/>
+          </div>
+          <div class="col-md-12">
+            <label class="form-label">請求先住所</label>
+            <input type="text" class="form-control form-input" id="stgBillAddr" placeholder="都道府県・市区町村・番地・建物"/>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">デフォルト支払い方法</label>
+            <select id="stgPayMethod" class="form-select form-input">
+              <option value="card">クレジットカード</option>
+              <option value="bank">銀行振込</option>
+              <option value="token">トークン</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- API / Webhook -->
+    <div class="card" style="margin-top:24px;">
+      <div class="card-header"><div class="card-title">API / Webhooks（モック）</div></div>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">APIキー</label>
+          <div class="input-group">
+            <input type="text" class="form-control form-input" id="stgApiKey" readonly/>
+            <button class="btn btn-outline-secondary" id="stgApiToggleBtn">表示/非表示</button>
+            <button class="btn btn-secondary" id="stgApiRegenBtn">再発行</button>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Webhook URL（支払いイベント）</label>
+          <input type="url" class="form-control form-input" id="stgWebhookUrl" placeholder="https://example.com/webhook"/>
+          <button class="btn btn-outline-primary btn-sm mt-2" id="stgWebhookTestBtn">テスト送信（モック）</button>
+        </div>
+      </div>
+      <div class="text-muted" style="font-size:12px;margin-top:8px;">※いずれもフロントモック。実API実装はサーバ結合フェーズで。</div>
+    </div>
+  </main>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

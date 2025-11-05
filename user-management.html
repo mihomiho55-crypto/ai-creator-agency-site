@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A-002 ユーザー管理</title>
+<style>
+:root{--b:#e5e7eb;--t:#111827;--m:#6b7280;--bg:#fafafa;--card:#fff;--accent:#111827}
+*{box-sizing:border-box}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif;background:var(--bg);color:var(--t);margin:0}
+/* Header + Logo */
+.app-header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--b)}
+.app-header .inner{max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;align-items:center}
+.logo-container{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-icon{width:32px;height:32px;border-radius:8px;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:800;font-size:.95rem;letter-spacing:.5px}
+.logo{font-weight:800;color:var(--t);font-size:1rem}
+/* Layout */
+.layout{display:grid;grid-template-columns:260px 1fr;gap:20px;max-width:1200px;margin:0 auto;padding:24px}
+@media (max-width:960px){.layout{grid-template-columns:1fr}}
+.sidenav{background:var(--card);border:1px solid var(--b);border-radius:12px;padding:16px;position:sticky;top:16px;height:max-content}
+.sidenav a{display:flex;gap:8px;text-decoration:none;color:var(--t);padding:10px 12px;border-radius:10px;margin:2px 0}
+.sidenav a:hover{background:#f3f4f6}.sidenav a.active{background:var(--accent);color:#fff}
+.container{max-width:900px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--b);border-radius:12px;padding:18px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.muted{color:var(--m)}
+.input{border:1px solid var(--b);border-radius:10px;padding:10px 12px;background:#fff}
+.select{border:1px solid var(--b);border-radius:10px;padding:10px 12px;background:#fff}
+.btn{display:inline-flex;gap:8px;align-items:center;background:var(--accent);color:#fff;border:0;border-radius:999px;padding:10px 16px;font-weight:600;cursor:pointer;text-decoration:none}
+.btn.ghost{background:#374151}
+.table{width:100%;border-collapse:separate;border-spacing:0}
+.table th,.table td{padding:10px 12px;border-bottom:1px solid var(--b);text-align:left}
+.badge{display:inline-block;border-radius:999px;padding:2px 10px;font-weight:700;font-size:.82rem}
+.badge.role{background:#eef2ff;color:#1e40af}
+.badge.ok{background:#ecfdf5;color:#065f46}
+.badge.stop{background:#fef2f2;color:#991b1b}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+hr.sep{border:none;border-top:1px solid var(--b);margin:14px 0}
+</style>
+</head>
+<body>
+<header class="app-header">
+  <div class="inner">
+    <a href="/" class="logo-container" aria-label="AI Creator Agency ホーム">
+      <div class="logo-icon">AI</div><div class="logo">Creator Agency</div>
+    </a>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidenav">
+    <h3>管理メニュー</h3>
+    <a href="/admin">📊 管理ダッシュボード</a>
+    <a href="/admin/users" class="active">👥 ユーザー管理</a>
+    <a href="/admin/payments">💳 支払い管理</a>
+    <a href="/admin/settings">⚙️ システム設定</a>
+    <a href="/admin/logs">📈 ログ・統計</a>
+  </aside>
+
+  <main class="container">
+    <h1 style="margin:0 0 6px;font-size:1.4rem;">A-002 ユーザー管理</h1>
+    <p class="muted" style="margin:0 0 14px;">講師・受講生の一覧、検索、権限と状態の切替を行えます。</p>
+
+    <section class="card">
+      <div class="row" style="justify-content:space-between;margin-bottom:12px;">
+        <div class="row">
+          <input id="q" class="input" placeholder="名前/メールで検索">
+          <select id="role" class="select">
+            <option value="">すべてのロール</option>
+            <option value="teacher">講師</option>
+            <option value="student">受講生</option>
+            <option value="admin">管理者</option>
+          </select>
+          <select id="status" class="select">
+            <option value="">状態: すべて</option>
+            <option value="active">有効</option>
+            <option value="suspended">停止</option>
+          </select>
+          <button class="btn" id="search">検索</button>
+        </div>
+        <div class="row">
+          <button class="btn ghost" id="invite">＋ 招待リンク発行</button>
+        </div>
+      </div>
+      <hr class="sep">
+      <div style="overflow:auto">
+        <table class="table" id="tbl">
+          <thead>
+            <tr>
+              <th>ユーザー</th><th>メール</th><th>ロール</th><th>状態</th><th>登録日</th><th style="width:220px">操作</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+const USERS = [
+  {id:1,name:"桜井 美帆",email:"miho@example.com",role:"admin",status:"active",joined:"2025-05-01"},
+  {id:2,name:"中村 ひろみ",email:"hiromi@example.com",role:"teacher",status:"active",joined:"2025-06-12"},
+  {id:3,name:"渡邊 美貴",email:"miki@example.com",role:"teacher",status:"suspended",joined:"2025-06-20"},
+  {id:4,name:"伊丹 眞紀子",email:"makiko@example.com",role:"student",status:"active",joined:"2025-07-03"},
+  {id:5,name:"田中 花子",email:"hanako@example.com",role:"student",status:"active",joined:"2025-07-09"},
+];
+
+const TBody = document.querySelector('#tbl tbody');
+const q = document.getElementById('q');
+const role = document.getElementById('role');
+const status = document.getElementById('status');
+
+function badgeRole(r){
+  return `<span class="badge role">${r}</span>`;
+}
+function badgeStatus(s){
+  return s==='active' ? `<span class="badge ok">有効</span>` : `<span class="badge stop">停止</span>`;
+}
+function render(rows){
+  TBody.innerHTML = rows.map(u=>`
+    <tr>
+      <td>${u.name}</td>
+      <td>${u.email}</td>
+      <td>${badgeRole(u.role)}</td>
+      <td>${badgeStatus(u.status)}</td>
+      <td>${u.joined}</td>
+      <td>
+        <div class="actions">
+          <button class="btn" data-edit="${u.id}">編集</button>
+          <button class="btn ghost" data-toggle="${u.id}">${u.status==='active'?'停止':'有効化'}</button>
+          <button class="btn ghost" data-reset="${u.id}">PWリセット</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+  bindActions();
+}
+function bindActions(){
+  TBody.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>alert('編集モーダル（後で実装可）'));
+  TBody.querySelectorAll('[data-toggle]').forEach(b=>b.onclick=(e)=>{
+    const id = Number(e.currentTarget.dataset.toggle);
+    const user = USERS.find(x=>x.id===id);
+    user.status = user.status==='active'?'suspended':'active';
+    applyFilter();
+  });
+  TBody.querySelectorAll('[data-reset]').forEach(b=>b.onclick=()=>alert('パスワード再設定リンクを送信（擬似）'));
+}
+function applyFilter(){
+  const t = (q.value||'').toLowerCase();
+  const r = role.value; const s = status.value;
+  const rows = USERS.filter(u=>{
+    if(t && !(u.name+u.email).toLowerCase().includes(t)) return false;
+    if(r && u.role!==r) return false;
+    if(s && u.status!==s) return false;
+    return true;
+  });
+  render(rows);
+}
+document.getElementById('search').onclick = applyFilter;
+document.getElementById('invite').onclick = ()=>alert('招待リンクを発行しました（擬似）: https://example.com/invite/XXXX');
+applyFilter();
+
+// サイドバーのアクティブ
+(function(){
+  var path = location.pathname.replace(/\/+$/,'');
+  document.querySelectorAll('.sidenav a').forEach(a=>{
+    var href=(a.getAttribute('href')||'').replace(/\/+$/,'');
+    if(href && (href===path || (href!=='/' && path.startsWith(href)))) a.classList.add('active');
+  });
+})();
+</script>
+</body>
+</html>

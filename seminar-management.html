@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>セミナー管理 | AI SNSマーケティング＆オンライン講座プラットフォーム</title>
+  <!-- フォント -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- アイコン -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+  <!-- Bootstrap（必要なら） -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- 共通スタイル -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- サイドバー -->
+  <nav class="sidebar">
+    <div class="logo-container">
+      <div class="logo-icon">AI</div>
+      <div class="logo">Creator Agency</div>
+    </div>
+    <div class="nav-menu">
+      <a href="index.html" class="nav-item">
+        <i class="material-icons-round">dashboard</i>
+        <span>ダッシュボード</span>
+      </a>
+      <a href="sns-marketing.html" class="nav-item">
+        <i class="material-icons-round">tag</i>
+        <span>SNSマーケティング</span>
+      </a>
+      <a href="content-scheduler.html" class="nav-item">
+        <i class="material-icons-round">edit</i>
+        <span>コンテンツ作成</span>
+      </a>
+      <a href="seminar-management.html" class="nav-item active">
+        <i class="material-icons-round">event</i>
+        <span>セミナー管理</span>
+      </a>
+      <a href="course-content.html" class="nav-item">
+        <i class="material-icons-round">video_library</i>
+        <span>講座コンテンツ</span>
+      </a>
+      <a href="student-management.html" class="nav-item">
+        <i class="material-icons-round">people</i>
+        <span>受講生管理</span>
+      </a>
+
+      <div class="nav-section-title">アカウント</div>
+      <a href="revenue-management.html" class="nav-item">
+        <i class="material-icons-round">payments</i>
+        <span>売上・支払い管理</span>
+      </a>
+      <a href="settings.html" class="nav-item">
+        <i class="material-icons-round">settings</i>
+        <span>設定</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- メイン -->
+  <main class="main-content">
+    <!-- ヘッダー -->
+    <div class="header">
+      <h1 class="page-title">セミナー管理</h1>
+      <div class="user-menu">
+        <div class="notification-icon">
+          <i class="material-icons-round" style="color: var(--text-secondary);">notifications</i>
+          <div class="notification-badge">1</div>
+        </div>
+        <div class="user-avatar">TS</div>
+      </div>
+    </div>
+
+    <!-- 上段：作成フォーム + ステータス -->
+    <div class="dashboard-grid" style="grid-template-columns: 2fr 1fr;">
+      <!-- セミナー作成フォーム -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">新規セミナー作成</div>
+          <div class="card-action" id="seminarDraftBtn" style="user-select:none;">
+            <i class="material-icons-round" style="font-size:18px;vertical-align:middle;">save</i>
+            <span style="margin-left:6px;">下書き保存</span>
+          </div>
+        </div>
+        <form id="seminarForm" autocomplete="off">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div style="grid-column:1 / -1;">
+              <label style="font-size:12px;color:var(--text-secondary);">タイトル</label>
+              <input id="seminarTitle" type="text" class="form-input" placeholder="例）『効果的なSNS運用の基礎』" required>
+            </div>
+
+            <div>
+              <label style="font-size:12px;color:var(--text-secondary);">開催日時</label>
+              <input id="seminarDateTime" type="datetime-local" class="form-input" required>
+            </div>
+
+            <div>
+              <label style="font-size:12px;color:var(--text-secondary);">所要時間（分）</label>
+              <input id="seminarDuration" type="number" min="10" max="480" class="form-input" placeholder="60" required>
+            </div>
+
+            <div>
+              <label style="font-size:12px;color:var(--text-secondary);">定員</label>
+              <input id="seminarCapacity" type="number" min="1" max="10000" class="form-input" placeholder="100" required>
+            </div>
+
+            <div>
+              <label style="font-size:12px;color:var(--text-secondary);">開催形式</label>
+              <select id="seminarType" class="form-input">
+                <option value="recorded" selected>録画配信（推奨）</option>
+                <option value="live">ライブ配信</option>
+                <option value="offline">オフライン</option>
+              </select>
+            </div>
+
+            <div>
+              <label style="font-size:12px;color:var(--text-secondary);">配信リンク（Zoom/録画URL）</label>
+              <input id="seminarLink" type="url" class="form-input" placeholder="https://...">
+            </div>
+
+            <div style="grid-column:1 / -1;">
+              <label style="font-size:12px;color:var(--text-secondary);">説明</label>
+              <textarea id="seminarDescription" rows="3" class="form-input" placeholder="概要や参加メリット、対象者、アジェンダなど"></textarea>
+            </div>
+
+            <div style="grid-column:1 / -1;display:flex;gap:12px;flex-wrap:wrap;">
+              <button type="submit" class="btn-primary" style="border:none;">
+                <i class="material-icons-round" style="font-size:18px;vertical-align:middle;">add_to_queue</i>
+                <span style="margin-left:6px;">セミナーを作成</span>
+              </button>
+              <button type="button" id="openReminderModalBtn" class="btn-secondary">
+                <i class="material-icons-round" style="font-size:18px;vertical-align:middle;">notifications_active</i>
+                <span style="margin-left:6px;">自動リマインド設定</span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- 作成ガイド（簡易ステップ） -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">クイックガイド</div>
+        </div>
+        <ol style="padding-left:18px;color:var(--text-secondary);line-height:1.8;">
+          <li>タイトルと日時、定員を入力</li>
+          <li>リンクまたは録画URLを設定</li>
+          <li>必要なら自動リマインドをON</li>
+          <li>「セミナーを作成」で公開</li>
+        </ol>
+        <div style="margin-top:12px;">
+          <a href="content-scheduler.html" class="btn-secondary" style="text-decoration:none;">
+            <i class="material-icons-round" style="font-size:18px;vertical-align:middle;">auto_fix_high</i>
+            <span style="margin-left:6px;">告知投稿を作成</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- カレンダー & 一覧 -->
+    <div class="dashboard-grid" style="grid-template-columns: 1.5fr 1fr;">
+      <!-- カレンダー -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">カレンダー</div>
+          <div class="card-action" style="display:flex;gap:10px;align-items:center;">
+            <select id="calendarView" class="form-input" style="max-width:150px;">
+              <option value="month" selected>月表示</option>
+              <option value="week">週表示</option>
+              <option value="list">リスト</option>
+            </select>
+            <button id="calendarPrev" class="btn-secondary" type="button" aria-label="前へ">
+              <i class="material-icons-round" style="font-size:18px;vertical-align:middle;">chevron_left</i>
+            </button>
+            <button id="calendarNext" class="btn-secondary" type="button" aria-label="次へ">
+              <i class="material-icons-round" style="font-size:18px;vertical-align:middle;">chevron_right</i>
+            </button>
+          </div>
+        </div>
+        <div id="calendarHeader" style="font-weight:600;margin-bottom:8px;">2025年11月</div>
+        <div id="calendarGrid" class="chart-container" style="height:auto;display:grid;grid-template-columns:repeat(7,1fr);gap:8px;">
+          <!-- JSで日セルを描画 -->
+        </div>
+      </div>
+
+      <!-- セミナー一覧 -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">セミナー一覧</div>
+          <div class="card-action" id="refreshSeminarList" style="user-select:none;">
+            <i class="material-icons-round" style="font-size:18px;vertical-align:middle;">refresh</i>
+            <span style="margin-left:6px;">更新</span>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px;">
+          <select id="seminarStatusFilter" class="form-input" style="max-width:180px;">
+            <option value="all" selected>すべて</option>
+            <option value="upcoming">開催前</option>
+            <option value="ongoing">開催中</option>
+            <option value="ended">終了</option>
+          </select>
+          <input id="seminarSearch" type="text" class="form-input" placeholder="タイトルで検索">
+        </div>
+
+        <div id="seminarList" style="display:grid;grid-template-columns:1fr;gap:12px;">
+          <!-- JSでカードを注入 -->
+        </div>
+      </div>
+    </div>
+
+    <!-- 最近の予約アクティビティ（任意） -->
+    <div class="card" style="margin-top:24px;">
+      <div class="card-header">
+        <div class="card-title">最近の予約アクティビティ</div>
+        <a href="#" class="card-action">すべて表示</a>
+      </div>
+      <div id="reservationActivity" class="activity-list">
+        <!-- JSでタイムライン注入（受講生予約、キャンセル等） -->
+      </div>
+    </div>
+  </main>
+
+  <!-- モーダル：セミナー詳細 -->
+  <div id="modalSeminarDetail" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.25);z-index:999;align-items:center;justify-content:center;padding:16px;">
+    <div class="card" style="max-width:720px;width:100%;position:relative;">
+      <div class="card-header">
+        <div class="card-title">セミナー詳細</div>
+        <button id="closeSeminarDetail" class="btn-secondary" type="button">閉じる</button>
+      </div>
+      <div id="seminarDetailBody">
+        <!-- JSで詳細を注入 -->
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
+        <button id="editSeminarBtn" class="btn-secondary" type="button">
+          <i class="material-icons-round" style="font-size:18px;vertical-align:middle;">edit</i>
+          <span style="margin-left:6px;">編集</span>
+        </button>
+        <button id="duplicateSeminarBtn" class="btn-secondary" type="button">
+          <i class="material-icons-round" style="font-size:18px;vertical-align:middle;">content_copy</i>
+          <span style="margin-left:6px;">複製</span>
+        </button>
+        <button id="deleteSeminarBtn" class="btn-secondary" type="button" style="color:var(--error);border-color:var(--error);">
+          <i class="material-icons-round" style="font-size:18px;vertical-align:middle;">delete</i>
+          <span style="margin-left:6px;">削除</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- モーダル：自動リマインド設定 -->
+  <div id="modalReminder" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.25);z-index:999;align-items:center;justify-content:center;padding:16px;">
+    <div class="card" style="max-width:560px;width:100%;position:relative;">
+      <div class="card-header">
+        <div class="card-title">自動リマインド設定</div>
+        <button id="closeReminderModalBtn" class="btn-secondary" type="button">閉じる</button>
+      </div>
+      <form id="reminderForm">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div style="grid-column:1 / -1;">
+            <label style="font-size:12px;color:var(--text-secondary);">対象セミナー</label>
+            <select id="reminderSeminarId" class="form-input"></select>
+          </div>
+
+          <div>
+            <label style="font-size:12px;color:var(--text-secondary);">3日前</label>
+            <select id="remind3d" class="form-input">
+              <option value="off" selected>オフ</option>
+              <option value="email">メール</option>
+              <option value="dm">DM/LINE</option>
+              <option value="both">メール + DM</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="font-size:12px;color:var(--text-secondary);">1日前</label>
+            <select id="remind1d" class="form-input">
+              <option value="off" selected>オフ</option>
+              <option value="email">メール</option>
+              <option value="dm">DM/LINE</option>
+              <option value="both">メール + DM</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="font-size:12px;color:var(--text-secondary);">1時間前</label>
+            <select id="remind1h" class="form-input">
+              <option value="off" selected>オフ</option>
+              <option value="email">メール</option>
+              <option value="dm">DM/LINE</option>
+              <option value="both">メール + DM</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="font-size:12px;color:var(--text-secondary);">送信テスト</label>
+            <button id="sendTestReminder" class="btn-secondary" type="button">テスト送信</button>
+          </div>
+
+          <div style="grid-column:1 / -1;">
+            <label style="font-size:12px;color:var(--text-secondary);">メッセージテンプレート</label>
+            <textarea id="reminderTemplate" rows="4" class="form-input" placeholder="例）『{title}』は {date} {time} 開催です。参加リンク：{link}"></textarea>
+          </div>
+
+          <div style="grid-column:1 / -1;display:flex;gap:12px;flex-wrap:wrap;">
+            <button type="submit" class="btn-primary" style="border:none;">
+              <i class="material-icons-round" style="font-size:18px;vertical-align:middle;">notifications_active</i>
+              <span style="margin-left:6px;">保存</span>
+            </button>
+            <button type="button" id="disableReminder" class="btn-secondary">
+              <i class="material-icons-round" style="font-size:18px;vertical-align:middle;">notifications_off</i>
+              <span style="margin-left:6px;">停止</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 共通スクリプト（後で script.js に実装） -->
+  <script src="js/script.js"></script>
+</body>
+</html>

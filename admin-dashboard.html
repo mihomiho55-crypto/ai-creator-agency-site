@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A-001 管理ダッシュボード</title>
+<style>
+:root{--b:#e5e7eb;--t:#111827;--m:#6b7280;--bg:#fafafa;--card:#fff;--accent:#111827}
+*{box-sizing:border-box}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif;background:var(--bg);color:var(--t);margin:0}
+
+/* ===== Header + Logo ===== */
+.app-header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--b)}
+.app-header .inner{max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;align-items:center}
+.logo-container{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-icon{width:32px;height:32px;border-radius:8px;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:800;font-size:.95rem;letter-spacing:.5px}
+.logo{font-weight:800;color:var(--t);font-size:1rem}
+
+/* ===== Layout ===== */
+.layout{display:grid;grid-template-columns:260px 1fr;gap:20px;max-width:1200px;margin:0 auto;padding:24px}
+@media (max-width:960px){.layout{grid-template-columns:1fr}}
+
+.sidenav{background:var(--card);border:1px solid var(--b);border-radius:12px;padding:16px;position:sticky;top:16px;height:max-content}
+.sidenav a{display:flex;gap:8px;text-decoration:none;color:var(--t);padding:10px 12px;border-radius:10px;margin:2px 0}
+.sidenav a:hover{background:#f3f4f6}
+.sidenav a.active{background:var(--accent);color:#fff}
+
+.container{max-width:900px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--b);border-radius:12px;padding:18px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media (max-width:720px){.grid{grid-template-columns:1fr}}
+
+.kpi{display:flex;justify-content:space-between;align-items:center}
+.kpi strong{font-size:1.6rem}
+
+.alert{border-left:4px solid #f59e0b;background:#FFFBEB;padding:12px;border-radius:10px;border:1px solid #FDE68A}
+.muted{color:var(--m)}
+</style>
+</head>
+<body>
+
+<!-- 共通ヘッダー（ロゴ） -->
+<header class="app-header">
+  <div class="inner">
+    <a href="/" class="logo-container" aria-label="AI Creator Agency ホーム">
+      <div class="logo-icon">AI</div>
+      <div class="logo">Creator Agency</div>
+    </a>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidenav">
+    <h3>管理メニュー</h3>
+    <a href="/admin" class="active">📊 管理ダッシュボード</a>
+    <a href="/admin/users">👥 ユーザー管理</a>
+    <a href="/admin/payments">💳 支払い管理</a>
+    <a href="/admin/settings">⚙️ システム設定</a>
+    <a href="/admin/logs">📈 ログ・統計</a>
+  </aside>
+
+  <main class="container">
+    <h1 style="font-size:1.4rem;margin:0 0 6px;">A-001 管理ダッシュボード</h1>
+    <p class="muted" style="margin:0 0 14px;">システム全体の指標とアラートを確認できます。</p>
+
+    <section class="grid">
+      <div class="card kpi"><div>総受講生</div><strong id="k1">—</strong></div>
+      <div class="card kpi"><div>今月売上</div><strong id="k2">—</strong></div>
+      <div class="card kpi"><div>今週セミナー予約</div><strong id="k3">—</strong></div>
+      <div class="card kpi"><div>未処理サポート</div><strong id="k4">—</strong></div>
+    </section>
+
+    <section class="card" style="margin-top:12px;">
+      <div class="alert">
+        <strong>⚠️ アラート:</strong> 返金リクエストが 2 件あります。<span class="muted">（/admin/payments を確認）</span>
+      </div>
+      <div class="alert" style="margin-top:10px;">
+        <strong>⚠️ アラート:</strong> 失敗した決済が 3 件検出されました。
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+const stats={students:2210,revenueMonth:"¥3,480,000",seminarWeek:42,tickets:5};
+document.getElementById('k1').textContent=stats.students.toLocaleString();
+document.getElementById('k2').textContent=stats.revenueMonth;
+document.getElementById('k3').textContent=String(stats.seminarWeek);
+document.getElementById('k4').textContent=String(stats.tickets);
+
+// サイドバーのアクティブ自動付与
+(function(){
+  var path = location.pathname.replace(/\/+$/,'');
+  document.querySelectorAll('.sidenav a').forEach(a=>{
+    var href=(a.getAttribute('href')||'').replace(/\/+$/,'');
+    if(href && (href===path || (href!=='/' && path.startsWith(href)))) a.classList.add('active');
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html><html lang="ja"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P-002 ランディング</title>
+<style>
+:root{--b:#e5e7eb;--t:#111827;--m:#6b7280;--bg:#fafafa;--card:#fff;--accent:#111827}
+*{box-sizing:border-box}body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif;background:var(--bg);color:var(--t);margin:0}
+.container{max-width:1200px;margin:0 auto;padding:24px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+@media (max-width:960px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--b);border-radius:12px;padding:18px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.btn{display:inline-flex;gap:8px;align-items:center;background:var(--accent);color:#fff;border:0;border-radius:999px;padding:10px 16px;font-weight:600;cursor:pointer;text-decoration:none}
+.btn.ghost{background:#fff;color:var(--t);border:1px solid var(--b)}
+.muted{color:var(--m)}
+.hero{display:grid;grid-template-columns:1.2fr .8fr;gap:20px;align-items:center}
+@media (max-width:960px){.hero{grid-template-columns:1fr}}
+.hero h1{font-size:2rem;margin:0 0 10px}
+.hero p{margin:0 0 16px}
+/* Header + Logo */
+.app-header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--b)}
+.app-header .inner{max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between}
+.logo-container{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-icon{width:32px;height:32px;border-radius:8px;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:800;font-size:.95rem;letter-spacing:.5px}
+.logo{font-weight:800;color:var(--t);font-size:1rem}
+.nav a{margin-left:10px}
+</style>
+</head><body>
+<header class="app-header">
+  <div class="inner">
+    <a class="logo-container" href="/landing.html">
+      <div class="logo-icon">AI</div><div class="logo">Creator Agency</div>
+    </a>
+    <nav class="nav">
+      <a href="/pricing.html" class="btn ghost">料金プラン</a>
+      <a href="/auth.html" class="btn">無料で始める</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <!-- Hero -->
+  <section class="hero">
+    <div>
+      <h1>AI × 教育運営を、もっとスマートに。</h1>
+      <p class="muted">講師のためのオールインワン：SNS集客、セミナー、講座、決済、受講生管理。<br>「作る・届ける・育てる」をワンストップで。</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
+        <a href="/auth.html" class="btn">今すぐはじめる</a>
+        <a href="/pricing.html" class="btn ghost">料金を見る</a>
+      </div>
+    </div>
+    <div class="card">
+      <strong>主な機能</strong>
+      <ul style="margin:10px 0 0 18px;line-height:1.8">
+        <li>SNSマーケティング分析とAIリライト</li>
+        <li>セミナー作成・予約・リマインド</li>
+        <li>講座アップロード・視聴進捗トラッキング</li>
+        <li>テスト作成・受験・自動採点</li>
+        <li>売上・支払い管理、請求書ダウンロード</li>
+        <li>受講生ダッシュボード＆学習メモ</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Cards -->
+  <section style="margin-top:20px" class="grid">
+    <div class="card">
+      <h3 style="margin:0 0 6px">高速オンボーディング</h3>
+      <p class="muted">メール登録だけで開始。既存のYouTube/Vimeo/ファイルもすぐ講座化。</p>
+    </div>
+    <div class="card">
+      <h3 style="margin:0 0 6px">運営自動化</h3>
+      <p class="muted">予約・決済・通知を自動で。あなたは価値提供に集中。</p>
+    </div>
+    <div class="card">
+      <h3 style="margin:0 0 6px">チーム運用</h3>
+      <p class="muted">アシスタントや講師を招待し、権限管理でスムーズに分業。</p>
+    </div>
+    <div class="card">
+      <h3 style="margin:0 0 6px">成長を見える化</h3>
+      <p class="muted">ダッシュボードで収益・予約・学習進捗を一目で把握。</p>
+    </div>
+  </section>
+
+  <section style="margin-top:24px;text-align:center" class="card">
+    <h3 style="margin:0 0 8px">今すぐ無料で試す</h3>
+    <p class="muted" style="margin:0 0 12px">クレジットカード不要。いつでも解約できます。</p>
+    <a href="/auth.html" class="btn">アカウントを作成</a>
+  </section>
+</main>
+</body></html>

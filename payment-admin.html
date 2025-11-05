@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A-003 支払い管理</title>
+<style>
+:root{--b:#e5e7eb;--t:#111827;--m:#6b7280;--bg:#fafafa;--card:#fff;--accent:#111827}
+*{box-sizing:border-box}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif;background:var(--bg);color:var(--t);margin:0}
+/* Header + Logo */
+.app-header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--b)}
+.app-header .inner{max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;align-items:center}
+.logo-container{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-icon{width:32px;height:32px;border-radius:8px;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:800;font-size:.95rem;letter-spacing:.5px}
+.logo{font-weight:800;color:var(--t);font-size:1rem}
+/* Layout */
+.layout{display:grid;grid-template-columns:260px 1fr;gap:20px;max-width:1200px;margin:0 auto;padding:24px}
+@media (max-width:960px){.layout{grid-template-columns:1fr}}
+.sidenav{background:var(--card);border:1px solid var(--b);border-radius:12px;padding:16px;position:sticky;top:16px;height:max-content}
+.sidenav a{display:flex;gap:8px;text-decoration:none;color:var(--t);padding:10px 12px;border-radius:10px;margin:2px 0}
+.sidenav a:hover{background:#f3f4f6}.sidenav a.active{background:var(--accent);color:#fff}
+.container{max-width:900px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--b);border-radius:12px;padding:18px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.muted{color:var(--m)}
+.input,.select{border:1px solid var(--b);border-radius:10px;padding:10px 12px;background:#fff}
+.btn{display:inline-flex;gap:8px;align-items:center;background:var(--accent);color:#fff;border:0;border-radius:999px;padding:10px 16px;font-weight:600;cursor:pointer;text-decoration:none}
+.btn.ghost{background:#374151}
+.table{width:100%;border-collapse:separate;border-spacing:0}
+.table th,.table td{padding:10px 12px;border-bottom:1px solid var(--b);text-align:left;white-space:nowrap}
+.badge{display:inline-block;border-radius:999px;padding:2px 10px;font-weight:700;font-size:.82rem}
+.badge.paid{background:#ecfdf5;color:#065f46}
+.badge.refund{background:#fef2f2;color:#991b1b}
+.badge.fail{background:#fee2e2;color:#991b1b}
+.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media (max-width:720px){.summary{grid-template-columns:1fr}}
+.kpi{background:#fff;border:1px solid var(--b);border-radius:12px;padding:16px}
+.kpi strong{font-size:1.4rem}
+hr.sep{border:none;border-top:1px solid var(--b);margin:14px 0}
+</style>
+</head>
+<body>
+<header class="app-header">
+  <div class="inner">
+    <a href="/" class="logo-container" aria-label="AI Creator Agency ホーム">
+      <div class="logo-icon">AI</div><div class="logo">Creator Agency</div>
+    </a>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidenav">
+    <h3>管理メニュー</h3>
+    <a href="/admin">📊 管理ダッシュボード</a>
+    <a href="/admin/users">👥 ユーザー管理</a>
+    <a href="/admin/payments" class="active">💳 支払い管理</a>
+    <a href="/admin/settings">⚙️ システム設定</a>
+    <a href="/admin/logs">📈 ログ・統計</a>
+  </aside>
+
+  <main class="container">
+    <h1 style="margin:0 0 6px;font-size:1.4rem;">A-003 支払い管理</h1>
+    <p class="muted" style="margin:0 0 14px;">取引の検索、返金処理、失敗決済の確認ができます。</p>
+
+    <!-- サマリー -->
+    <section class="summary" style="margin-bottom:12px;">
+      <div class="kpi"><div>今月売上</div><strong id="revMonth">—</strong></div>
+      <div class="kpi"><div>今月返金</div><strong id="refundMonth">—</strong></div>
+      <div class="kpi"><div>失敗決済</div><strong id="failedCount">—</strong></div>
+    </section>
+
+    <!-- フィルタ -->
+    <section class="card">
+      <div class="row" style="justify-content:space-between;margin-bottom:12px;">
+        <div class="row">
+          <input id="q" class="input" placeholder="取引ID/ユーザー/メモ検索">
+          <select id="status" class="select">
+            <option value="">状態: すべて</option>
+            <option value="paid">支払い済み</option>
+            <option value="refund">返金</option>
+            <option value="fail">失敗</option>
+          </select>
+          <select id="currency" class="select">
+            <option value="">通貨: すべて</option>
+            <option>JPY</option><option>USD</option><option>AED</option>
+          </select>
+          <button class="btn" id="search">検索</button>
+        </div>
+        <div class="row">
+          <button class="btn ghost" id="export">CSV 書き出し</button>
+        </div>
+      </div>
+      <hr class="sep">
+
+      <div style="overflow:auto">
+        <table class="table" id="tbl">
+          <thead>
+            <tr>
+              <th>日時</th><th>取引ID</th><th>ユーザー</th><th>金額</th><th>通貨</th><th>状態</th><th>メモ</th><th style="width:180px">操作</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+const TX = [
+  {id:"TX-1001", at:"2025-11-01 10:12", user:"桜井 美帆", amount:110000, cur:"JPY", status:"paid", memo:"SC®コーチング購入"},
+  {id:"TX-1002", at:"2025-11-02 14:22", user:"中村 ひろみ", amount:199, cur:"USD", status:"paid", memo:"Udemy コース"},
+  {id:"TX-1003", at:"2025-11-03 09:13", user:"渡邊 美貴", amount:330000, cur:"JPY", status:"refund", memo:"返金：キャンセル"},
+  {id:"TX-1004", at:"2025-11-03 22:40", user:"伊丹 眞紀子", amount:550000, cur:"JPY", status:"paid", memo:"認定講師講座"},
+  {id:"TX-1005", at:"2025-11-04 08:10", user:"田中 花子", amount:1200, cur:"AED", status:"fail", memo:"カード認証失敗"},
+];
+
+const TBody = document.querySelector('#tbl tbody');
+const q = document.getElementById('q');
+const statusSel = document.getElementById('status');
+const curSel = document.getElementById('currency');
+
+function badge(s){
+  if(s==='paid') return '<span class="badge paid">支払い済み</span>';
+  if(s==='refund') return '<span class="badge refund">返金</span>';
+  return '<span class="badge fail">失敗</span>';
+}
+function render(rows){
+  TBody.innerHTML = rows.map(t=>`
+    <tr>
+      <td>${t.at}</td>
+      <td>${t.id}</td>
+      <td>${t.user}</td>
+      <td style="text-align:right;">${t.amount.toLocaleString()}</td>
+      <td>${t.cur}</td>
+      <td>${badge(t.status)}</td>
+      <td>${t.memo||"—"}</td>
+      <td>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn" data-detail="${t.id}">詳細</button>
+          ${t.status==='paid'
+            ? `<button class="btn ghost" data-refund="${t.id}">返金</button>`
+            : `<button class="btn ghost" disabled>返金</button>`
+          }
+        </div>
+      </td>
+    </tr>
+  `).join('');
+  bindActions();
+}
+function bindActions(){
+  TBody.querySelectorAll('[data-detail]').forEach(b=>b.onclick=()=>alert('取引詳細（後で実装可）'));
+  TBody.querySelectorAll('[data-refund]').forEach(b=>b.onclick=(e)=>{
+    const id = e.currentTarget.dataset.refund;
+    if(confirm(`取引 ${id} を返金しますか？`)){
+      const tx = TX.find(x=>x.id===id);
+      tx.status = 'refund';
+      applyFilter();
+    }
+  });
+}
+function applyFilter(){
+  const t=(q.value||'').toLowerCase(), s=statusSel.value, c=curSel.value;
+  const rows = TX.filter(x=>{
+    if(t && !(x.id+x.user+(x.memo||'')).toLowerCase().includes(t)) return false;
+    if(s && x.status!==s) return false;
+    if(c && x.cur!==c) return false;
+    return true;
+  });
+  render(rows);
+  updateSummary();
+}
+function updateSummary(){
+  const paid = TX.filter(x=>x.status==='paid').reduce((a,b)=>a+b.amount,0);
+  const refund = TX.filter(x=>x.status==='refund').reduce((a,b)=>a+b.amount,0);
+  const failed = TX.filter(x=>x.status==='fail').length;
+  document.getElementById('revMonth').textContent = '¥'+paid.toLocaleString();
+  document.getElementById('refundMonth').textContent = '¥'+refund.toLocaleString();
+  document.getElementById('failedCount').textContent = String(failed);
+}
+document.getElementById('search').onclick = applyFilter;
+document.getElementById('export').onclick = ()=>alert('CSVを生成しました（擬似）');
+applyFilter();
+
+// サイドバーのアクティブ
+(function(){
+  var path = location.pathname.replace(/\/+$/,'');
+  document.querySelectorAll('.sidenav a').forEach(a=>{
+    var href=(a.getAttribute('href')||'').replace(/\/+$/,'');
+    if(href && (href===path || (href!=='/' && path.startsWith(href)))) a.classList.add('active');
+  });
+})();
+</script>
+</body>
+</html>

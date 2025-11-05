@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SNSマーケティング管理 | AI SNSマーケティング＆オンライン講座プラットフォーム</title>
+  <!-- フォント -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- アイコン -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+  <!-- Bootstrap（必要なら） -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- 共通スタイル -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- サイドバー -->
+  <nav class="sidebar">
+    <div class="logo-container">
+      <div class="logo-icon">AI</div>
+      <div class="logo">Creator Agency</div>
+    </div>
+    <div class="nav-menu">
+      <a href="index.html" class="nav-item">
+        <i class="material-icons-round">dashboard</i>
+        <span>ダッシュボード</span>
+      </a>
+      <a href="sns-marketing.html" class="nav-item active">
+        <i class="material-icons-round">tag</i>
+        <span>SNSマーケティング</span>
+      </a>
+      <a href="content-scheduler.html" class="nav-item">
+        <i class="material-icons-round">edit</i>
+        <span>コンテンツ作成</span>
+      </a>
+      <a href="seminar-management.html" class="nav-item">
+        <i class="material-icons-round">event</i>
+        <span>セミナー管理</span>
+      </a>
+      <a href="course-content.html" class="nav-item">
+        <i class="material-icons-round">video_library</i>
+        <span>講座コンテンツ</span>
+      </a>
+      <a href="student-management.html" class="nav-item">
+        <i class="material-icons-round">people</i>
+        <span>受講生管理</span>
+      </a>
+
+      <div class="nav-section-title">アカウント</div>
+      <a href="revenue-management.html" class="nav-item">
+        <i class="material-icons-round">payments</i>
+        <span>売上・支払い管理</span>
+      </a>
+      <a href="settings.html" class="nav-item">
+        <i class="material-icons-round">settings</i>
+        <span>設定</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- メイン -->
+  <main class="main-content">
+    <!-- ヘッダー -->
+    <div class="header">
+      <h1 class="page-title">SNSマーケティング管理</h1>
+      <div class="user-menu">
+        <div class="notification-icon">
+          <i class="material-icons-round" style="color: var(--text-secondary);">notifications</i>
+          <div class="notification-badge">2</div>
+        </div>
+        <div class="user-avatar">TS</div>
+      </div>
+    </div>
+
+    <!-- キーワード設定 -->
+    <div class="card" id="keywordCard">
+      <div class="card-header">
+        <div class="card-title">ターゲット・キーワード設定</div>
+        <div class="card-action" id="suggestKeywordsBtn" style="user-select:none;">
+          <i class="material-icons-round" style="font-size:18px;vertical-align:middle;">lightbulb</i>
+          <span style="margin-left:6px;">候補を提案</span>
+        </div>
+      </div>
+      <form id="keywordForm" autocomplete="off">
+        <div style="display:grid;grid-template-columns:1fr auto;gap:12px;">
+          <input type="text" id="keywordInput" class="form-input" placeholder="例）金運アップ, 自己啓発, 量子力学, タロット"/>
+          <button type="submit" class="btn-primary" style="border:none;">
+            <i class="material-icons-round" style="font-size:18px;vertical-align:middle;">add</i>
+            <span style="margin-left:6px;">追加</span>
+          </button>
+        </div>
+      </form>
+      <div id="keywordChips" style="margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;"></div>
+
+      <div style="display:flex;gap:12px;margin-top:16px;flex-wrap:wrap;">
+        <select id="platformFilter" class="form-input" style="max-width:220px;">
+          <option value="all" selected>全プラットフォーム</option>
+          <option value="instagram">Instagram</option>
+          <option value="x">X（旧Twitter）</option>
+          <option value="tiktok">TikTok</option>
+          <option value="youtube">YouTube</option>
+        </select>
+        <select id="periodFilter" class="form-input" style="max-width:220px;">
+          <option value="7d">過去7日</option>
+          <option value="30d" selected>過去30日</option>
+          <option value="90d">過去90日</option>
+        </select>
+        <button id="analyzeBtn" class="btn-secondary" type="button">
+          <i class="material-icons-round" style="font-size:18px;vertical-align:middle;">travel_explore</i>
+          <span style="margin-left:6px;">分析する</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- モデリングアカウント検索結果 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">モデリング候補アカウント</div>
+        <div class="card-action" id="viewAllAccounts" style="user-select:none;">すべて表示</div>
+      </div>
+      <div id="modelingList" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+        <!-- JSでカードを注入 -->
+      </div>
+    </div>
+
+    <!-- バズコンテンツ分析 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">バズコンテンツ分析</div>
+        <div class="card-action" id="refreshTrending" style="user-select:none;">
+          <i class="material-icons-round" style="font-size:18px;vertical-align:middle;">refresh</i>
+          <span style="margin-left:6px;">更新</span>
+        </div>
+      </div>
+
+      <div id="trendingList" style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;">
+        <!-- JSでカードを注入 -->
+      </div>
+
+      <!-- リライト導線 -->
+      <div style="text-align:right; margin-top:16px;">
+        <a href="content-scheduler.html" class="btn-primary" style="text-decoration:none;">
+          <i class="material-icons-round" style="font-size:18px; vertical

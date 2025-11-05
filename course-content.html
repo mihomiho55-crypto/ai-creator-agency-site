@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>講座コンテンツ管理 | AI SNSマーケティング＆オンライン講座プラットフォーム</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- サイドバー -->
+  <nav class="sidebar">
+    <div class="logo-container">
+      <div class="logo-icon">AI</div>
+      <div class="logo">Creator Agency</div>
+    </div>
+    <div class="nav-menu">
+      <a href="index.html" class="nav-item">
+        <i class="material-icons-round">dashboard</i><span>ダッシュボード</span>
+      </a>
+      <a href="sns-marketing.html" class="nav-item">
+        <i class="material-icons-round">tag</i><span>SNSマーケティング</span>
+      </a>
+      <a href="content-scheduler.html" class="nav-item">
+        <i class="material-icons-round">edit</i><span>コンテンツ作成</span>
+      </a>
+      <a href="seminar-management.html" class="nav-item">
+        <i class="material-icons-round">event</i><span>セミナー管理</span>
+      </a>
+      <a href="course-content.html" class="nav-item active">
+        <i class="material-icons-round">video_library</i><span>講座コンテンツ</span>
+      </a>
+      <a href="student-management.html" class="nav-item">
+        <i class="material-icons-round">people</i><span>受講生管理</span>
+      </a>
+      <div class="nav-section-title">アカウント</div>
+      <a href="revenue-management.html" class="nav-item">
+        <i class="material-icons-round">payments</i><span>売上・支払い管理</span>
+      </a>
+      <a href="settings.html" class="nav-item">
+        <i class="material-icons-round">settings</i><span>設定</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- メイン -->
+  <main class="main-content">
+    <!-- ヘッダー -->
+    <div class="header">
+      <h1 class="page-title">講座コンテンツ管理</h1>
+      <div class="user-menu">
+        <div class="notification-icon">
+          <i class="material-icons-round" style="color: var(--text-secondary);">notifications</i>
+          <div class="notification-badge">4</div>
+        </div>
+        <div class="user-avatar">TS</div>
+      </div>
+    </div>
+
+    <!-- 上段：操作バー -->
+    <div class="card" style="margin-bottom: 24px;">
+      <div class="card-header">
+        <div class="card-title">コース一覧</div>
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap: wrap;">
+          <input id="courseSearch" type="text" placeholder="コース名で検索…" style="border:1px solid rgba(0,0,0,0.08); border-radius:10px; padding:8px 10px; outline:none;">
+          <select id="courseStatusFilter" style="border:none; color: var(--primary); font-weight:600; background:transparent; cursor:pointer;">
+            <option value="all">すべて</option>
+            <option value="published">公開</option>
+            <option value="draft">下書き</option>
+          </select>
+          <button id="newCourseBtn" class="btn-secondary">
+            <i class="material-icons-round" style="font-size:18px; vertical-align:middle;">add</i>
+            <span style="margin-left:6px;">新規コース</span>
+          </button>
+        </div>
+      </div>
+      <div id="courseList" style="display:grid; grid-template-columns: repeat(2, 1fr); gap:16px;"></div>
+    </div>
+
+    <!-- 下段：選択コースの編集 -->
+    <div class="dashboard-grid" style="grid-template-columns: 1.2fr 1fr;">
+      <!-- 右：コース設定 -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">選択中のコース</div>
+          <div>
+            <button id="editCourseBtn" class="btn-secondary" style="margin-right:6px;">
+              <i class="material-icons-round" style="font-size:18px; vertical-align:middle;">edit</i><span style="margin-left:6px;">コース編集</span>
+            </button>
+            <button id="togglePublishBtn" class="btn-secondary">
+              <i class="material-icons-round" style="font-size:18px; vertical-align:middle;">public</i><span style="margin-left:6px;">公開/非公開</span>
+            </button>
+          </div>
+        </div>
+        <div id="selectedCourseSummary" style="font-size:14px; color: var(--text-secondary);"></div>
+        <div style="margin-top:16px; display:flex; gap:8px; flex-wrap: wrap;">
+          <a id="previewCourseBtn" href="course-viewer.html" class="card-action">受講生としてプレビュー</a>
+          <button id="duplicateCourseBtn" class="btn-secondary"><i class="material-icons-round" style="font-size:18px;vertical-align:middle;">content_copy</i><span style="margin-left:6px;">複製</span></button>
+          <button id="deleteCourseBtn" class="btn-secondary" style="color:var(--error); border-color:var(--error);"><i class="material-icons-round" style="font-size:18px;vertical-align:middle;">delete</i><span style="margin-left:6px;">削除</span></button>
+        </div>
+      </div>
+
+      <!-- 左：レッスン構成 -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">レッスン構成</div>
+          <div>
+            <button id="addContentBtn" class="btn-secondary">
+              <i class="material-icons-round" style="font-size:18px; vertical-align:middle;">add_to_queue</i>
+              <span style="margin-left:6px;">コンテンツ追加</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="contentList" style="display:flex; flex-direction:column; gap:10px;"></div>
+        <div style="margin-top:12px; font-size:12px; color:var(--text-secondary);">
+          ※ 並び順はアイテム右端の ▲/▼ で調整できます。必須/公開の切り替えも可能です。
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- コース編集モーダル -->
+  <div id="courseModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); align-items:center; justify-content:center; z-index:9999;">
+    <div class="card" style="width:min(680px, 92vw);">
+      <div class="card-header">
+        <div class="card-title" id="courseModalTitle">新規コース</div>
+        <a class="card-action" id="closeCourseModal">閉じる</a>
+      </div>
+      <form id="courseForm">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+          <div>
+            <label>タイトル</label>
+            <input id="courseTitle" type="text" required class="form-control" placeholder="例）SNSコンテンツ作成マスター講座">
+          </div>
+          <div>
+            <label>価格（¥）</label>
+            <input id="coursePrice" type="number" min="0" step="100" class="form-control" placeholder="例）128000">
+          </div>
+          <div>
+            <label>カテゴリー</label>
+            <input id="courseCategory" type="text" class="form-control" placeholder="例）マーケティング">
+          </div>
+          <div>
+            <label>サムネイルURL</label>
+            <input id="courseThumb" type="url" class="form-control" placeholder="https://...">
+          </div>
+          <div style="grid-column:1/-1;">
+            <label>説明</label>
+            <textarea id="courseDescription" class="form-control" rows="4" placeholder="講座の概要や到達目標など"></textarea>
+          </div>
+        </div>
+        <div style="margin-top:14px; display:flex; gap:8px; justify-content:flex-end;">
+          <button type="button" id="saveDraftCourseBtn" class="btn-secondary"><i class="material-icons-round" style="font-size:18px;vertical-align:middle;">save</i><span style="margin-left:6px;">下書き保存</span></button>
+          <button type="submit" class="btn-secondary"><i class="material-icons-round" style="font-size:18px;vertical-align:middle;">check</i><span style="margin-left:6px;">保存</span></button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- コンテンツ追加/編集モーダル -->
+  <div id="contentModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); align-items:center; justify-content:center; z-index:9999;">
+    <div class="card" style="width:min(640px, 92vw);">
+      <div class="card-header">
+        <div class="card-title" id="contentModalTitle">コンテンツ追加</div>
+        <a class="card-action" id="closeContentModal">閉じる</a>
+      </div>
+      <form id="contentForm">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+          <div>
+            <label>タイプ</label>
+            <select id="contentType" class="form-select">
+              <option value="video">動画</option>
+              <option value="pdf">資料</option>
+              <option value="quiz">テスト</option>
+            </select>
+          </div>
+          <div>
+            <label>所要時間（分）</label>
+            <input id="contentDuration" type="number" min="0" step="5" class="form-control" placeholder="例）20">
+          </div>
+          <div style="grid-column:1/-1;">
+            <label>タイトル</label>
+            <input id="contentTitle" type="text" required class="form-control" placeholder="例）ショート動画の台本テンプレ">
+          </div>
+          <div style="grid-column:1/-1;">
+            <label>URL / ファイルパス</label>
+            <input id="contentURL" type="text" class="form-control" placeholder="https://... または /files/sample.pdf">
+          </div>
+        </div>
+        <div style="margin-top:14px; display:flex; gap:8px; justify-content:flex-end;">
+          <button type="submit" class="btn-secondary"><i class="material-icons-round" style="font-size:18px;vertical-align:middle;">check</i><span style="margin-left:6px;">追加/更新</span></button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>コンテンツ作成・スケジュール | AI SNSマーケティング＆オンライン講座プラットフォーム</title>
+
+  <!-- フォント -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <!-- アイコン -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+  <!-- Bootstrap（必要なら） -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"/>
+
+  <!-- 自作スタイル -->
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+  <!-- サイドバー -->
+  <nav class="sidebar" aria-label="講師ナビゲーション">
+    <div class="logo-container">
+      <div class="logo-icon" aria-hidden="true">AI</div>
+      <div class="logo">Creator Agency</div>
+    </div>
+
+    <div class="nav-menu">
+      <a href="index.html" class="nav-item">
+        <i class="material-icons-round" aria-hidden="true">dashboard</i>
+        <span>ダッシュボード</span>
+      </a>
+
+      <a href="sns-marketing.html" class="nav-item">
+        <i class="material-icons-round" aria-hidden="true">tag</i>
+        <span>SNSマーケティング</span>
+      </a>
+
+      <a href="content-scheduler.html" class="nav-item active" aria-current="page">
+        <i class="material-icons-round" aria-hidden="true">edit</i>
+        <span>コンテンツ作成・スケジュール</span>
+      </a>
+
+      <a href="#" class="nav-item">
+        <i class="material-icons-round" aria-hidden="true">event</i>
+        <span>セミナー管理</span>
+      </a>
+
+      <a href="#" class="nav-item">
+        <i class="material-icons-round" aria-hidden="true">video_library</i>
+        <span>講座コンテンツ</span>
+      </a>
+
+      <a href="#" class="nav-item">
+        <i class="material-icons-round" aria-hidden="true">people</i>
+        <span>受講生管理</span>
+      </a>
+
+      <div class="nav-section-title">アカウント</div>
+
+      <a href="#" class="nav-item">
+        <i class="material-icons-round" aria-hidden="true">payments</i>
+        <span>売上・支払い管理</span>
+      </a>
+
+      <a href="#" class="nav-item">
+        <i class="material-icons-round" aria-hidden="true">settings</i>
+        <span>設定</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- メイン -->
+  <main class="main-content">
+    <!-- ヘッダー -->
+    <div class="header">
+      <h1 class="page-title">コンテンツ作成・スケジュール</h1>
+      <div class="user-menu">
+        <div class="notification-icon" title="通知">
+          <i class="material-icons-round" style="color: var(--text-secondary);" aria-hidden="true">notifications</i>
+          <div class="notification-badge" aria-label="未読通知 1件">1</div>
+        </div>
+        <div class="user-avatar" title="プロフィール">TS</div>
+      </div>
+    </div>
+
+    <!-- ステップ1：下書き/ソース入力 -->
+    <section class="card" aria-label="ステップ1：下書き/ソース入力">
+      <div class="card-header">
+        <div class="card-title">ステップ1：下書き/ソース入力</div>
+      </div>
+      <div>
+        <div style="display:grid; gap:16px;">
+          <textarea id="sourceContent" class="form-input" rows="6" placeholder="リライト元になる文章やメモを貼り付けてください（例：SNSで見つけたネタ、箇条書きメモ、要約したいURLのメモなど）"></textarea>
+
+          <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:16px;">
+            <div class="form-group">
+              <label for="tone" class="chart-label">トーン</label>
+              <select id="tone" class="form-input">
+                <option value="friendly">親しみやすい</option>
+                <option value="professional" selected>プロフェッショナル</option>
+                <option value="motivational">モチベーショナル</option>
+                <option value="luxury">ラグジュアリー</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="length" class="chart-label">長さ</label>
+              <select id="length" class="form-input">
+                <option value="short">短い（〜120字）</option>
+                <option value="medium" selected>中（〜280字）</option>
+                <option value="long">長い（〜600字）</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="cta" class="chart-label">CTA（任意）</label>
+              <input id="cta" class="form-input" placeholder="例：詳細はプロフィールのリンクから"/>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <button id="btnRewrite" class="btn-primary" type="button">
+              <i class="material-icons-round" style="font-size:18px; vertical-align:middle;">auto_fix_high</i>
+              <span style="margin-left:6px;">AIリライト生成</span>
+            </button>
+            <button id="btnClearSource" class="btn-secondary" type="button">クリア</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ステップ2：AI生成結果 & プレビュー -->
+    <section class="card" style="margin-top:24px;" aria-label="ステップ2：AI生成結果">
+      <div class="card-header">
+        <div class="card-title">ステップ2：AI生成結果 & プレビュー</div>
+      </div>
+      <div style="display:grid; gap:16px;">
+        <textarea id="aiOutput" class="form-input" rows="8" placeholder="AI生成結果がここに表示されます。必要に応じて手動編集できます。"></textarea>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div class="chart-label"><span id="charCount">0</span> 文字</div>
+          <div style="display:flex; gap:12px;">
+            <button id="btnImprove" class="btn-secondary" type="button">もう少し魅力的に</button>
+            <button id="btnShorter" class="btn-secondary" type="button">短くする</button>
+            <button id="btnHashtags" class="btn-secondary" type="button">ハッシュタグ提案</button>
+          </div>
+        </div>
+        <div id="hashtags" class="chart-label" style="display:none;"></div>
+      </div>
+    </section>
+
+    <!-- ステップ3：プラットフォーム & メディア -->
+    <section class="card" style="margin-top:24px;" aria-label="ステップ3：プラットフォーム & メディア">
+      <div class="card-header">
+        <div class="card-title">ステップ3：プラットフォーム & メディア</div>
+      </div>
+
+      <div style="display:grid; gap:16px;">
+        <div>
+          <div class="chart-label" style="margin-bottom:8px;">投稿先プラットフォーム</div>
+          <div style="display:flex; gap:16px; flex-wrap:wrap;">
+            <label><input type="checkbox" name="platforms" value="twitter"/> X（Twitter）</label>
+            <label><input type="checkbox" name="platforms" value="instagram"/> Instagram</label>
+            <label><input type="checkbox" name="platforms" value="facebook"/> Facebook</label>
+            <label><input type="checkbox" name="platforms" value="youtube"/> YouTube コミュニティ</label>
+            <label><input type="checkbox" name="platforms" value="tiktok"/> TikTok</label>
+          </div>
+        </div>
+
+        <div>
+          <div class="chart-label" style="margin-bottom:8px;">メディア添付（画像/動画）</div>
+          <input id="mediaUpload" class="form-input" type="file" accept="image/*,video/*" multiple/>
+          <div id="mediaPreview" style="display:flex; gap:12px; flex-wrap:wrap; margin-top:8px;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ステップ4：スケジュール & 投稿予約 -->
+    <section class="card" style="margin-top:24px;" aria-label="ステップ4：スケジュール & 投稿予約">
+      <div class="card-header">
+        <div class="card-title">ステップ4：スケジュール & 投稿予約</div>
+      </div>
+
+      <div style="display:grid; gap:16px;">
+        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:16px;">
+          <div class="form-group">
+            <label for="scheduleAt" class="chart-label">予約日時</label>
+            <input id="scheduleAt" class="form-input" type="datetime-local"/>
+          </div>
+          <div class="form-group">
+            <label class="chart-label">繰り返し</label>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <input id="repeatWeekly" type="checkbox"/>
+              <label for="repeatWeekly">毎週同時刻に予約</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="utm" class="chart-label">UTM（任意）</label>
+            <input id="utm" class="form-input" placeholder="utm_source=sns&utm_medium=post&utm_campaign=launch"/>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <button id="btnSchedule" class="btn-primary" type="button">
+            <i class="material-icons-round" style="font-size:18px; vertical-align:middle;">schedule</i>
+            <span style="margin-left:6px;">予約を追加</span>
+          </button>
+          <button id="btnPostNow" class="btn-secondary" type="button">今すぐ投稿（モック）</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 予約一覧 -->
+    <section class="card" style="margin-top:24px;" aria-label="予約一覧">
+      <div class="card-header">
+        <div class="card-title">予約一覧</div>
+        <a id="btnClearAllSchedules" class="card-action" href="#">すべて削除</a>
+      </div>
+
+      <ul id="scheduledList" style="list-style:none; padding:0; margin:0; display:grid; gap:12px;">
+        <!-- JSで埋め込み -->
+      </ul>
+    </section>
+  </main>
+
+  <!-- 自作スクリプト -->
+  <script src="js/script.js" defer></script>
+</body>
+</html>

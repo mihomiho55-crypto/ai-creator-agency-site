@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>受講生ダッシュボード | Creator Agency</title>
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- App CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Sidebar（学習者向け簡易メニュー） -->
+  <nav class="sidebar">
+    <div class="logo-container">
+      <div class="logo-icon">AI</div>
+      <div class="logo">Creator Agency</div>
+    </div>
+
+    <div class="nav-menu">
+      <a href="student-dashboard.html" class="nav-item active">
+        <i class="material-icons-round">dashboard</i><span>受講生ダッシュボード</span>
+      </a>
+      <a href="seminar-booking.html" class="nav-item">
+        <i class="material-icons-round">event</i><span>セミナー予約</span>
+      </a>
+      <a href="course-viewer.html" class="nav-item">
+        <i class="material-icons-round">video_library</i><span>マイコース</span>
+      </a>
+      <a href="test-taking.html" class="nav-item">
+        <i class="material-icons-round">assignment</i><span>テスト・課題</span>
+      </a>
+      <a href="payment-history.html" class="nav-item">
+        <i class="material-icons-round">receipt_long</i><span>支払い履歴</span>
+      </a>
+
+      <div class="nav-section-title">アカウント</div>
+      <a href="settings.html" class="nav-item">
+        <i class="material-icons-round">settings</i><span>設定</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <main class="main-content">
+    <!-- Header -->
+    <div class="header">
+      <h1 class="page-title">受講生ダッシュボード</h1>
+      <div class="user-menu">
+        <div class="notification-icon">
+          <i class="material-icons-round" style="color: var(--text-secondary);">notifications</i>
+          <div class="notification-badge" id="studentNotiCount">0</div>
+        </div>
+        <div class="user-avatar" id="studentAvatarTop">ST</div>
+      </div>
+    </div>
+
+    <!-- KPI -->
+    <div class="stats-grid">
+      <div class="card stat-card">
+        <div class="stat-label">受講中コース</div>
+        <div class="stat-value" id="kpiCourses">0</div>
+        <div class="stat-change positive" id="kpiCoursesChange">
+          <i class="material-icons-round" style="font-size: 16px; margin-right: 4px;">arrow_upward</i>今月 +0
+        </div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-label">今週の学習時間</div>
+        <div class="stat-value" id="kpiStudyHrs">0h</div>
+        <div class="stat-change positive" id="kpiStudyHrsChange">
+          <i class="material-icons-round" style="font-size: 16px; margin-right: 4px;">arrow_upward</i>先週比 +0h
+        </div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-label">直近の進捗</div>
+        <div class="stat-value" id="kpiLatestProgress">0%</div>
+        <div class="stat-change positive" id="kpiLatestProgressChange">
+          <i class="material-icons-round" style="font-size: 16px; margin-right: 4px;">arrow_upward</i>+0%
+        </div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-label">期限間近のタスク</div>
+        <div class="stat-value" id="kpiDueTasks">0</div>
+        <div class="stat-change negative" id="kpiDueTasksChange">
+          <i class="material-icons-round" style="font-size: 16px; margin-right: 4px;">priority_high</i>要対応
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid: 学習グラフ + 通知 -->
+    <div class="dashboard-grid">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">直近7日 学習時間</div>
+          <div class="card-action">
+            <select id="studentChartPeriod" style="border:none; color: var(--primary); font-weight:600; background:transparent;">
+              <option value="7" selected>7日間</option>
+              <option value="30">30日間</option>
+            </select>
+          </div>
+        </div>
+        <div class="chart-container">
+          <canvas id="studentStudyChart"></canvas>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">通知</div>
+          <a href="test-taking.html" class="card-action">課題ページへ</a>
+        </div>
+        <div class="notification-list" id="studentNotiList"></div>
+      </div>
+    </div>
+
+    <!-- マイコース -->
+    <div class="card" style="margin-top: 24px;">
+      <div class="card-header">
+        <div class="card-title">マイコース</div>
+        <a href="course-viewer.html" class="card-action">すべて表示</a>
+      </div>
+      <div id="studentCourseGrid" class="quick-actions" style="grid-template-columns: repeat(3, 1fr);"></div>
+    </div>
+
+    <!-- 期限間近のタスク -->
+    <div class="card" style="margin-top: 24px;">
+      <div class="card-header">
+        <div class="card-title">期限間近のタスク / 小テスト</div>
+        <a href="test-taking.html" class="card-action">一覧を見る</a>
+      </div>
+      <div id="studentTaskList" class="activity-list"></div>
+    </div>
+  </main>
+
+  <!-- App JS -->
+  <script src="js/script.js"></script>
+</body>
+</html>

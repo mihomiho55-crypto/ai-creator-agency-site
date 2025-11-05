@@ -1,0 +1,218 @@
+<!DOCTYPE html><html lang="ja"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Creator Agency – 学習と収益を最速化する講師プラットフォーム</title>
+<meta http-equiv="Cache-Control" content="no-store" />
+<style>
+:root{--b:#e5e7eb;--t:#111827;--m:#6b7280;--bg:#fafafa;--card:#fff;--accent:#111827;--ok:#16a34a}
+*{box-sizing:border-box}body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif;background:var(--bg);color:var(--t);margin:0}
+.container{max-width:1200px;margin:0 auto;padding:24px}
+.card{background:var(--card);border:1px solid var(--b);border-radius:12px;padding:18px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.btn{display:inline-flex;gap:8px;align-items:center;background:var(--accent);color:#fff;border:0;border-radius:999px;padding:10px 16px;font-weight:600;cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn.ghost{background:#fff;color:var(--t);border:1px solid var(--b)}
+.badge{display:inline-block;border-radius:999px;padding:4px 10px;font-weight:700;font-size:.85rem;background:#111827;color:#fff}
+.badge.ok{background:var(--ok)}
+.grid-2{display:grid;grid-template-columns:1.1fr .9fr;gap:20px;align-items:center}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media (max-width:960px){.grid-2{grid-template-columns:1fr}.grid-3,.grid-4{grid-template-columns:1fr}}
+.muted{color:var(--m)} small.muted{font-size:.85rem}
+
+/* Header + Logo */
+.app-header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--b)}
+.app-header .inner{max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between}
+.logo-container{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-icon{width:32px;height:32px;border-radius:8px;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:800;font-size:.95rem;letter-spacing:.5px}
+.logo{font-weight:800;color:var(--t);font-size:1rem}
+.nav-actions{display:flex;gap:10px;flex-wrap:wrap}
+
+/* Sections */
+.hero h1{margin:0 0 10px;font-size:2.1rem;line-height:1.25}
+.hero p{margin:0 0 12px}
+.points{display:grid;gap:8px;margin-top:10px}
+.point{display:flex;gap:10px;align-items:flex-start}
+.point b{display:inline-grid;place-items:center;background:#eef2ff;color:#111827;border:1px solid #e5e7eb;width:28px;height:28px;border-radius:999px;font-size:.9rem;font-weight:700}
+.kpis .k{display:flex;justify-content:space-between;align-items:center;border:1px solid var(--b);border-radius:12px;padding:12px;background:#fff}
+.k .v{font-weight:800;font-size:1.4rem}
+.features .f{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--b);border-radius:12px;padding:12px;background:#fff}
+.f i{font-style:normal;font-weight:700}
+.trust{display:flex;gap:10px;flex-wrap:wrap}
+.trust .t{border:1px solid var(--b);background:#fff;padding:8px 10px;border-radius:999px;font-weight:700}
+.footer{margin-top:40px;padding:16px 24px;border-top:1px solid var(--b);text-align:center;color:var(--m)}
+/* --- HERO 箇条書き（番号 + テキスト）--- */
+.points{
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+.point{
+  display: flex;                 /* ← Flexで2カラムに */
+  align-items: flex-start;
+  gap: 12px;
+}
+.point b{
+  flex: 0 0 28px;                /* 左の丸番号は固定幅 */
+  width: 28px; height: 28px;
+  display: grid; place-items: center;
+  border-radius: 999px;
+  background: #eef2ff;
+  border: 1px solid #e5e7eb;
+  font-weight: 700; font-size: .9rem; color: #111827;
+  line-height: 1;
+}
+.point .text{
+  flex: 1 1 auto;                /* 右の本文に必ず横幅を与える */
+  min-width: 0;                  /* グリッド/フレックスでの縮み許可 */
+  writing-mode: horizontal-tb !important;  /* 念のため横書き固定 */
+  text-orientation: mixed;
+  white-space: normal;
+  word-break: break-word;        /* 必要時のみ改行 */
+  overflow-wrap: anywhere;
+  line-height: 1.7;
+}
+
+/* もしHERO左右2カラムなら(任意) */
+.grid-2{
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;  /* 左を広めに */
+  gap: 20px; align-items: center;
+}
+@media (max-width: 960px){
+  .grid-2{ grid-template-columns: 1fr; }
+}
+
+/* 左右バランスを少し左優先に */
+.grid-2{
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;  /* 以前: 1.1fr .9fr */
+  gap: 20px; align-items: center;
+}
+@media (max-width: 960px){
+  .grid-2{ grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<header class="app-header">
+  <div class="inner">
+    <a class="logo-container" href="/landing.html">
+      <div class="logo-icon">AI</div><div class="logo">Creator Agency</div>
+    </a>
+    <nav class="nav-actions">
+      <a href="/pricing.html" class="btn ghost">料金プラン</a>
+      <a href="/auth.html" class="btn">ログイン / 登録</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <!-- HERO -->
+  <section class="hero card">
+    <div class="grid-2">
+      <div>
+        <span class="badge ok">講師・教育ビジネス向け</span>
+        <h1>AIで「作る・売る・教える」を一体化。<br>収益まで最短距離で到達。</h1>
+        <p class="muted">AI Creator Agency は、<b>講座作成・投稿運用・セミナー管理・受講生管理・決済</b>をひとつにまとめた軽量プラットフォーム。今日から始めて、翌日には提供開始。</p>
+       <div class="points">
+  <div class="point">
+    <b>1</b>
+    <div class="text">AIリライトで投稿を両立（SNS自動下書き）</div>
+  </div>
+  <div class="point">
+    <b>2</b>
+    <div class="text">セミナー作成→予約→リマインド→録画提供までワンフロー</div>
+  </div>
+  <div class="point">
+    <b>3</b>
+    <div class="text">動画視聴の進捗記録で学習定着</div>
+  </div>
+  <div class="point">
+    <b>4</b>
+    <div class="text">決済・売上・請求の運営がラク</div>
+  </div>
+</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
+          <a href="/auth.html" class="btn">無料ではじめる</a>
+          <a href="/landing.html" class="btn ghost">機能を見る</a>
+        </div>
+        <small class="muted">※ ログイン済みの場合は自動でダッシュボードへ遷移します</small>
+      </div>
+      <div class="card kpis">
+        <div class="k"><div>総受講生</div><div class="v" id="k1">—</div></div>
+        <div class="k"><div>今月売上</div><div class="v" id="k2">—</div></div>
+        <div class="k"><div>投稿本数/週</div><div class="v" id="k3">—</div></div>
+        <div class="k"><div>完了率（今週）</div><div class="v" id="k4">—</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features" style="margin-top:14px">
+    <div class="grid-3">
+      <div class="f"><i>✍️</i><div><b>AIリライト & スケジュール</b><br><span class="muted">バズ事例から下書きを一括生成。プラットフォーム別に自動整形。</span></div></div>
+      <div class="f"><i>🎥</i><div><b>コース視聴 & 進捗記録</b><br><span class="muted">再生・停止で%保存、続きから再生。資料DLと確認テストに連動。</span></div></div>
+      <div class="f"><i>🗓️</i><div><b>セミナー管理</b><br><span class="muted">作成→予約→リマインド→アーカイブ公開まで一気通貫。</span></div></div>
+    </div>
+    <div class="grid-3" style="margin-top:12px">
+      <div class="f"><i>👥</i><div><b>受講生・進捗・メッセージ</b><br><span class="muted">一覧・個別メモ・セグメント別フォローで満足度UP。</span></div></div>
+      <div class="f"><i>💳</i><div><b>決済・請求</b><br><span class="muted">支払い履歴・請求書DL・返金管理まで。管理者ビューも完備。</span></div></div>
+      <div class="f"><i>📈</i><div><b>売上とコンテンツ分析</b><br><span class="muted">何が売れて・観られて・刺さっているかを一目で。</span></div></div>
+    </div>
+  </section>
+
+  <!-- SOCIAL PROOF / TRUST -->
+  <section class="card" style="margin-top:14px">
+    <div class="trust">
+      <span class="t">ノーコード運用</span>
+      <span class="t">軽量フロント</span>
+      <span class="t">データは手元に</span>
+      <span class="t">エクスポート可</span>
+      <span class="t">カスタムOK</span>
+    </div>
+    <div style="margin-top:10px;display:grid;gap:10px">
+      <div class="card" style="border-style:dashed">
+        <b>導入コメント（例）</b><br>
+        <span class="muted">「セットアップ当日から販売まで到達。毎日の投稿も自動で下書きが並ぶので、運営負担が激減しました。」</span>
+      </div>
+      <div class="card" style="border-style:dashed">
+        <b>成果ハイライト（例）</b><br>
+        <span class="muted">受講生 2,200名 / 月間売上 ¥3.5M / 平均完了率 68% / 予約リマインド開封率 52%</span>
+      </div>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+      <a href="/pricing.html" class="btn">料金を見る</a>
+      <a href="/auth.html" class="btn ghost">無料で試す</a>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  © AI Creator Agency — Build, Teach & Scale with AI
+</footer>
+
+<script>
+/** 仮データ（本番はAPI置換） */
+const stats={students:2210,revenueMonth:"¥3,480,000",postsWeek:47,completion:"68%"};
+document.getElementById('k1').textContent=stats.students.toLocaleString();
+document.getElementById('k2').textContent=stats.revenueMonth;
+document.getElementById('k3').textContent=String(stats.postsWeek);
+document.getElementById('k4').textContent=stats.completion;
+
+/** ロール判定ルーティング（ログイン済なら自動遷移） */
+(function route(){
+  try{
+    const authed = localStorage.getItem('auth') === 'true';
+    const role = (localStorage.getItem('role')||'').toLowerCase();
+    if(!authed) return; // 未ログインはそのままマーケ面を表示
+    if (role === 'teacher' || role === 'instructor') {
+      location.replace('/instructor-dashboard.html'); // U-001
+    } else if (role === 'student') {
+      location.replace('/student');                    // S-001
+    } else if (role === 'admin') {
+      location.replace('/admin');                      // A-001
+    } else {
+      location.replace('/auth.html');
+    }
+  }catch(e){}
+})();
+</script>
+</body></html>

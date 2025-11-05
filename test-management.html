@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>テスト・課題管理 | Creator Agency</title>
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+  <!-- Chart.js（不要でも他ページと整合のため残置OK） -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- App CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="logo-container">
+      <div class="logo-icon">AI</div>
+      <div class="logo">Creator Agency</div>
+    </div>
+
+    <div class="nav-menu">
+      <a href="index.html" class="nav-item">
+        <i class="material-icons-round">dashboard</i><span>ダッシュボード</span>
+      </a>
+      <a href="sns-marketing.html" class="nav-item">
+        <i class="material-icons-round">tag</i><span>SNSマーケティング</span>
+      </a>
+      <a href="content-scheduler.html" class="nav-item">
+        <i class="material-icons-round">edit</i><span>コンテンツ作成・スケジュール</span>
+      </a>
+      <a href="seminar-management.html" class="nav-item">
+        <i class="material-icons-round">event</i><span>セミナー管理</span>
+      </a>
+      <a href="course-content.html" class="nav-item">
+        <i class="material-icons-round">video_library</i><span>講座コンテンツ</span>
+      </a>
+      <a href="student-management.html" class="nav-item">
+        <i class="material-icons-round">people</i><span>受講生管理</span>
+      </a>
+
+      <div class="nav-section-title">アカウント</div>
+
+      <a href="revenue-management.html" class="nav-item">
+        <i class="material-icons-round">payments</i><span>売上・支払い管理</span>
+      </a>
+      <a href="test-management.html" class="nav-item active">
+        <i class="material-icons-round">assignment_turned_in</i><span>テスト・課題管理</span>
+      </a>
+      <a href="settings.html" class="nav-item">
+        <i class="material-icons-round">settings</i><span>設定</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <main class="main-content">
+    <!-- Header -->
+    <div class="header">
+      <h1 class="page-title">テスト・課題管理</h1>
+      <div class="user-menu">
+        <div class="notification-icon">
+          <i class="material-icons-round" style="color: var(--text-secondary);">notifications</i>
+          <div class="notification-badge">2</div>
+        </div>
+        <div class="user-avatar">TS</div>
+      </div>
+    </div>
+
+    <!-- Filters / Actions -->
+    <div class="card" style="margin-bottom: 24px;">
+      <div class="card-header">
+        <div class="card-title">フィルター & クイックアクション</div>
+        <a class="card-action" id="bulkDeleteBtn" href="javascript:void(0)">一括削除</a>
+      </div>
+
+      <div class="quick-actions" style="grid-template-columns: 2fr 1fr 1fr 1fr;">
+        <div class="action-btn" style="align-items: stretch; cursor:default;">
+          <div style="display:flex; gap:12px; width:100%;">
+            <input id="testSearch" class="form-input" type="text" placeholder="テスト名・課題名で検索" style="flex:2;">
+            <select id="courseFilterTest" class="form-input" style="flex:1;">
+              <option value="">すべてのコース</option>
+            </select>
+            <select id="statusFilterTest" class="form-input" style="flex:1;">
+              <option value="">すべての状態</option>
+              <option value="draft">下書き</option>
+              <option value="published">公開中</option>
+              <option value="closed">受付終了</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="action-btn" id="newTestBtn">
+          <div class="action-icon"><i class="material-icons-round">assignment</i></div>
+          <div class="action-label">テスト作成</div>
+        </div>
+
+        <div class="action-btn" id="newAssignmentBtn">
+          <div class="action-icon"><i class="material-icons-round">task</i></div>
+          <div class="action-label">課題作成</div>
+        </div>
+
+        <a class="action-btn" href="student-management.html" style="text-decoration:none;">
+          <div class="action-icon"><i class="material-icons-round">group</i></div>
+          <div class="action-label">受講生へ配布</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- List -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">一覧（テスト/課題）</div>
+        <a class="card-action" id="selectAllToggle" href="javascript:void(0)">全選択/解除</a>
+      </div>
+
+      <div style="overflow:auto;">
+        <table style="width:100%; border-collapse:separate; border-spacing:0 10px;">
+          <thead>
+            <tr style="text-align:left; color:var(--text-secondary); font-size:12px;">
+              <th style="padding:8px 12px; width:36px;"></th>
+              <th style="padding:8px 12px;">タイトル</th>
+              <th style="padding:8px 12px;">タイプ</th>
+              <th style="padding:8px 12px;">コース</th>
+              <th style="padding:8px 12px;">問題数/配点</th>
+              <th style="padding:8px 12px;">状態</th>
+              <th style="padding:8px 12px;">提出/合格率</th>
+              <th style="padding:8px 12px; text-align:right;">操作</th>
+            </tr>
+          </thead>
+          <tbody id="testList"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal -->
+  <div id="testModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.3); z-index:9999; align-items:center; justify-content:center; padding:16px;">
+    <div class="card" style="max-width:720px; width:100%; position:relative;">
+      <div class="card-header">
+        <div class="card-title" id="modalTitle">テスト作成</div>
+        <a class="card-action" id="closeModal" href="javascript:void(0)">閉じる</a>
+      </div>
+
+      <form id="testForm" class="form">
+        <div style="display:grid; gap:12px;">
+          <input type="hidden" id="testId" />
+          <div>
+            <label class="chart-label">タイトル</label>
+            <input id="titleInput" class="form-input" placeholder="例）第1回 小テスト"/>
+          </div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+            <div>
+              <label class="chart-label">タイプ</label>
+              <select id="typeInput" class="form-input">
+                <option value="test">テスト</option>
+                <option value="assignment">課題</option>
+              </select>
+            </div>
+            <div>
+              <label class="chart-label">紐づくコース</label>
+              <select id="courseInput" class="form-input"></select>
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:12px;">
+            <div>
+              <label class="chart-label">問題数</label>
+              <input id="questionsInput" type="number" class="form-input" placeholder="10"/>
+            </div>
+            <div>
+              <label class="chart-label">合格点</label>
+              <input id="passingInput" type="number" class="form-input" placeholder="70"/>
+            </div>
+            <div>
+              <label class="chart-label">状態</label>
+              <select id="statusInput" class="form-input">
+                <option value="draft">下書き</option>
+                <option value="published">公開中</option>
+                <option value="closed">受付終了</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="chart-label">説明（任意）</label>
+            <textarea id="descInput" class="form-input" rows="4" placeholder="概要や注意事項を入力"></textarea>
+          </div>
+          <div style="display:flex; gap:12px; justify-content:flex-end; margin-top:4px;">
+            <button type="button" id="deleteBtn" class="btn-secondary" style="padding:10px 16px;">削除</button>
+            <button type="submit" class="btn-primary" style="padding:10px 16px;">保存</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- App JS -->
+  <script src="js/script.js"></script>
+</body>
+</html>

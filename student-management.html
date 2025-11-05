@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>受講生管理 | AI SNSマーケティング＆オンライン講座プラットフォーム</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- サイドバー -->
+  <nav class="sidebar">
+    <div class="logo-container">
+      <div class="logo-icon">AI</div><div class="logo">Creator Agency</div>
+    </div>
+    <div class="nav-menu">
+      <a href="index.html" class="nav-item">
+        <i class="material-icons-round">dashboard</i><span>ダッシュボード</span>
+      </a>
+      <a href="sns-marketing.html" class="nav-item">
+        <i class="material-icons-round">tag</i><span>SNSマーケティング</span>
+      </a>
+      <a href="content-scheduler.html" class="nav-item">
+        <i class="material-icons-round">edit</i><span>コンテンツ作成</span>
+      </a>
+      <a href="seminar-management.html" class="nav-item">
+        <i class="material-icons-round">event</i><span>セミナー管理</span>
+      </a>
+      <a href="course-content.html" class="nav-item">
+        <i class="material-icons-round">video_library</i><span>講座コンテンツ</span>
+      </a>
+      <a href="student-management.html" class="nav-item active">
+        <i class="material-icons-round">people</i><span>受講生管理</span>
+      </a>
+      <div class="nav-section-title">アカウント</div>
+      <a href="revenue-management.html" class="nav-item">
+        <i class="material-icons-round">payments</i><span>売上・支払い管理</span>
+      </a>
+      <a href="settings.html" class="nav-item">
+        <i class="material-icons-round">settings</i><span>設定</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- メイン -->
+  <main class="main-content">
+    <!-- ヘッダー -->
+    <div class="header">
+      <h1 class="page-title">受講生管理</h1>
+      <div class="user-menu">
+        <div class="notification-icon">
+          <i class="material-icons-round" style="color: var(--text-secondary);">notifications</i>
+          <div class="notification-badge">2</div>
+        </div>
+        <div class="user-avatar">TS</div>
+      </div>
+    </div>
+
+    <!-- 上段：検索/フィルタ/操作 -->
+    <div class="card" style="margin-bottom: 24px;">
+      <div class="card-header">
+        <div class="card-title">受講生一覧</div>
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap: wrap;">
+          <input id="studentSearch" type="text" placeholder="氏名・メールで検索…" style="border:1px solid rgba(0,0,0,0.08); border-radius:10px; padding:8px 10px; outline:none;">
+          <select id="courseFilter" style="border:none; color: var(--primary); font-weight:600; background:transparent; cursor:pointer;">
+            <option value="all">すべてのコース</option>
+          </select>
+          <select id="statusFilter" style="border:none; color: var(--primary); font-weight:600; background:transparent; cursor:pointer;">
+            <option value="all">全ステータス</option>
+            <option value="active">受講中</option>
+            <option value="completed">修了</option>
+            <option value="paused">一時停止</option>
+          </select>
+          <button id="newStudentBtn" class="btn-secondary">
+            <i class="material-icons-round" style="font-size:18px; vertical-align:middle;">person_add</i>
+            <span style="margin-left:6px;">手動追加</span>
+          </button>
+        </div>
+      </div>
+      <div id="studentList" style="display:grid; grid-template-columns: repeat(2, 1fr); gap:16px;"></div>
+    </div>
+
+    <!-- 下段：詳細パネル -->
+    <div class="dashboard-grid" style="grid-template-columns: 1.2fr 1fr;">
+      <!-- 左：受講詳細 -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">受講詳細</div>
+          <div>
+            <button id="sendMessageBtn" class="btn-secondary"><i class="material-icons-round" style="font-size:18px;vertical-align:middle;">mail</i><span style="margin-left:6px;">個別メッセージ</span></button>
+            <button id="toggleStatusBtn" class="btn-secondary"><i class="material-icons-round" style="font-size:18px;vertical-align:middle;">sync</i><span style="margin-left:6px;">受講状態 切替</span></button>
+          </div>
+        </div>
+        <div id="studentSummary" style="font-size:14px; color:var(--text-secondary);"></div>
+        <div style="margin-top:16px;">
+          <div class="card-title" style="margin-bottom:8px;">進捗</div>
+          <div style="width:100%; height:220px;">
+            <canvas id="progressChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右：ノート/タグ -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">ノート & タグ</div>
+          <div>
+            <button id="saveNoteBtn" class="btn-secondary"><i class="material-icons-round" style="font-size:18px;vertical-align:middle;">save</i><span style="margin-left:6px;">保存</span></button>
+          </div>
+        </div>
+        <div>
+          <label>メモ</label>
+          <textarea id="studentNote" class="form-control" rows="6" placeholder="面談記録や学習状況メモなど…"></textarea>
+        </div>
+        <div style="margin-top:12px;">
+          <label>タグ（カンマ区切り）</label>
+          <input id="studentTags" type="text" class="form-control" placeholder="例）VIP, リピーター, 返金対応済み">
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 受講生追加/編集モーダル -->
+  <div id="studentModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); align-items:center; justify-content:center; z-index:9999;">
+    <div class="card" style="width:min(640px, 92vw);">
+      <div class="card-header">
+        <div class="card-title" id="studentModalTitle">受講生を追加</div>
+        <a class="card-action" id="closeStudentModal">閉じる</a>
+      </div>
+      <form id="studentForm">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+          <div>
+            <label>氏名</label>
+            <input id="stName" type="text" class="form-control" required placeholder="例）山田 花子">
+          </div>
+          <div>
+            <label>メール</label>
+            <input id="stEmail" type="email" class="form-control" required placeholder="example@mail.com">
+          </div>
+          <div>
+            <label>コース</label>
+            <select id="stCourse" class="form-select"></select>
+          </div>
+          <div>
+            <label>受講ステータス</label>
+            <select id="stStatus" class="form-select">
+              <option value="active">受講中</option>
+              <option value="completed">修了</option>
+              <option value="paused">一時停止</option>
+            </select>
+          </div>
+          <div style="grid-column:1/-1;">
+            <label>備考</label>
+            <textarea id="stMemo" class="form-control" rows="3" placeholder="任意"></textarea>
+          </div>
+        </div>
+        <div style="margin-top:14px; display:flex; gap:8px; justify-content:flex-end;">
+          <button type="submit" class="btn-secondary"><i class="material-icons-round" style="font-size:18px;vertical-align:middle;">check</i><span style="margin-left:6px;">保存</span></button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- メッセージモーダル（簡易） -->
+  <div id="messageModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); align-items:center; justify-content:center; z-index:9999;">
+    <div class="card" style="width:min(640px, 92vw);">
+      <div class="card-header">
+        <div class="card-title">個別メッセージ</div>
+        <a class="card-action" id="closeMessageModal">閉じる</a>
+      </div>
+      <form id="messageForm">
+        <div>
+          <label>宛先</label>
+          <input id="msgTo" type="text" class="form-control" disabled>
+        </div>
+        <div style="margin-top:12px;">
+          <label>件名</label>
+          <input id="msgSubject" type="text" class="form-control" placeholder="例）学習進捗のご確認">
+        </div>
+        <div style="margin-top:12px;">
+          <label>本文</label>
+          <textarea id="msgBody" class="form-control" rows="6" placeholder="本文を入力…"></textarea>
+        </div>
+        <div style="margin-top:14px; display:flex; gap:8px; justify-content:flex-end;">
+          <button type="submit" class="btn-secondary"><i class="material-icons-round" style="font-size:18px;vertical-align:middle;">send</i><span style="margin-left:6px;">送信（モック）</span></button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html><html lang="ja"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P-003 料金プラン</title>
+<style>
+:root{--b:#e5e7eb;--t:#111827;--m:#6b7280;--bg:#fafafa;--card:#fff;--accent:#111827}
+*{box-sizing:border-box}body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif;background:var(--bg);color:var(--t);margin:0}
+.container{max-width:1200px;margin:0 auto;padding:24px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media (max-width:960px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--b);border-radius:12px;padding:18px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.price{font-size:2rem;font-weight:800}
+.features{margin:10px 0 0 18px;line-height:1.9}
+.btn{display:inline-flex;gap:8px;align-items:center;background:var(--accent);color:#fff;border:0;border-radius:999px;padding:10px 16px;font-weight:600;cursor:pointer;text-decoration:none}
+.btn.ghost{background:#fff;color:var(--t);border:1px solid var(--b)}
+.badge{display:inline-block;background:#16a34a;color:#fff;border-radius:999px;padding:2px 10px;font-weight:700;font-size:.85rem;margin-left:8px}
+/* Header + Logo */
+.app-header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--b)}
+.app-header .inner{max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between}
+.logo-container{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-icon{width:32px;height:32px;border-radius:8px;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:800;font-size:.95rem;letter-spacing:.5px}
+.logo{font-weight:800;color:var(--t);font-size:1rem}
+.toggle{display:flex;gap:8px;align-items:center}
+.switch{position:relative;width:48px;height:28px;background:#e5e7eb;border-radius:999px;cursor:pointer}
+.knob{position:absolute;top:3px;left:3px;width:22px;height:22px;background:#fff;border-radius:50%;transition:all .2s}
+.switch.active{background:#111827}.switch.active .knob{left:23px}
+.save{color:#16a34a;font-weight:700}
+</style>
+</head><body>
+<header class="app-header">
+  <div class="inner">
+    <a class="logo-container" href="/landing.html">
+      <div class="logo-icon">AI</div><div class="logo">Creator Agency</div>
+    </a>
+    <nav>
+      <a href="/landing.html" class="btn ghost">製品紹介</a>
+      <a href="/auth.html" class="btn">無料トライアル</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <h1 style="margin:8px 0 6px;font-size:1.6rem;">P-003 料金プラン</h1>
+  <p class="muted" style="margin:0 0 14px">月払い / 年払いを切り替えできます。年払いは2ヶ月分お得。</p>
+
+  <!-- toggle -->
+  <div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+    <div class="toggle">
+      <span>月払い</span>
+      <div id="billSwitch" class="switch"><div class="knob"></div></div>
+      <span>年払い <span class="save">（約16%OFF）</span></span>
+    </div>
+    <a href="/auth.html" class="btn">今すぐ始める</a>
+  </div>
+
+  <!-- plans -->
+  <section class="grid" style="margin-top:16px">
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+        <h3 style="margin:0">Starter</h3>
+      </div>
+      <div class="price" data-m="¥1,980/月" data-y="¥19,800/年">¥1,980/月</div>
+      <ul class="features">
+        <li>受講生 100 名まで</li>
+        <li>講座 10 本、動画 50 本</li>
+        <li>基本の決済・請求書</li>
+        <li>メールサポート</li>
+      </ul>
+      <div style="margin-top:12px"><a href="/auth.html" class="btn">無料で試す</a></div>
+    </div>
+
+    <div class="card" style="border-width:2px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+        <h3 style="margin:0">Pro <span class="badge">人気</span></h3>
+      </div>
+      <div class="price" data-m="¥5,480/月" data-y="¥54,800/年">¥5,480/月</div>
+      <ul class="features">
+        <li>受講生 2,000 名まで</li>
+        <li>講座 無制限、動画 無制限</li>
+        <li>SNS分析・AIリライト</li>
+        <li>テスト・自動採点・証明書</li>
+        <li>優先サポート</li>
+      </ul>
+      <div style="margin-top:12px"><a href="/auth.html" class="btn">今すぐ申し込む</a></div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+        <h3 style="margin:0">Enterprise</h3>
+      </div>
+      <div class="price" data-m="お見積り" data-y="お見積り">お見積り</div>
+      <ul class="features">
+        <li>受講生 2,000 名以上</li>
+        <li>SLA / SSO / 監査ログ</li>
+        <li>導入支援・専任CSM</li>
+        <li>請求書・分割決済・法人契約</li>
+      </ul>
+      <div style="margin-top:12px"><a href="/auth.html" class="btn">お問い合わせ</a></div>
+    </div>
+  </section>
+
+  <section class="card" style="margin-top:18px">
+    <h3 style="margin:0 0 6px">よくある質問</h3>
+    <details><summary>支払い方法は？</summary><p class="muted">主要クレジットカード・請求書（Enterprise）に対応します。</p></details>
+    <details><summary>途中プラン変更はできますか？</summary><p class="muted">いつでも変更可能。差額は日割り/月割りで自動計算します。</p></details>
+    <details><summary>キャンセル・返金は？</summary><p class="muted">契約期間中はいつでも解約可能。次回更新以降の課金を停止します。</p></details>
+  </section>
+</main>
+
+<script>
+const sw=document.getElementById('billSwitch');
+const prices=[...document.querySelectorAll('.price')];
+let yearly=false;
+sw.addEventListener('click',()=>{
+  yearly=!yearly; sw.classList.toggle('active',yearly);
+  prices.forEach(p=>{ p.textContent = p.dataset[yearly?'y':'m']; });
+});
+</script>
+</body></html>

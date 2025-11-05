@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A-004 システム設定</title>
+<style>
+:root{--b:#e5e7eb;--t:#111827;--m:#6b7280;--bg:#fafafa;--card:#fff;--accent:#111827}
+*{box-sizing:border-box}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif;background:var(--bg);color:var(--t);margin:0}
+/* Header + Logo */
+.app-header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--b)}
+.app-header .inner{max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;align-items:center}
+.logo-container{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-icon{width:32px;height:32px;border-radius:8px;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:800;font-size:.95rem;letter-spacing:.5px}
+.logo{font-weight:800;color:var(--t);font-size:1rem}
+/* Layout */
+.layout{display:grid;grid-template-columns:260px 1fr;gap:20px;max-width:1200px;margin:0 auto;padding:24px}
+@media (max-width:960px){.layout{grid-template-columns:1fr}}
+.sidenav{background:var(--card);border:1px solid var(--b);border-radius:12px;padding:16px;position:sticky;top:16px;height:max-content}
+.sidenav a{display:flex;gap:8px;text-decoration:none;color:var(--t);padding:10px 12px;border-radius:10px;margin:2px 0}
+.sidenav a:hover{background:#f3f4f6}.sidenav a.active{background:var(--accent);color:#fff}
+.container{max-width:900px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--b);border-radius:12px;padding:18px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.input,.select,.textarea{border:1px solid var(--b);border-radius:10px;padding:10px 12px;background:#fff;width:100%}
+.textarea{min-height:96px}
+.switch{display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+.switch input{appearance:none;width:40px;height:22px;border-radius:999px;background:#e5e7eb;position:relative;outline:0;transition:.2s}
+.switch input:checked{background:#111827}
+.switch input:before{content:"";position:absolute;left:3px;top:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:.2s}
+.switch input:checked:before{transform:translateX(18px)}
+.btn{display:inline-flex;gap:8px;align-items:center;background:var(--accent);color:#fff;border:0;border-radius:999px;padding:10px 16px;font-weight:600;cursor:pointer;text-decoration:none}
+.btn.ghost{background:#374151}
+hr.sep{border:none;border-top:1px solid var(--b);margin:14px 0}
+.toast{position:fixed;right:16px;bottom:16px;background:#111827;color:#fff;padding:12px 14px;border-radius:10px;opacity:0;transform:translateY(8px);transition:.2s}
+.toast.show{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+<header class="app-header">
+  <div class="inner">
+    <a href="/" class="logo-container" aria-label="AI Creator Agency ホーム">
+      <div class="logo-icon">AI</div><div class="logo">Creator Agency</div>
+    </a>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidenav">
+    <h3>管理メニュー</h3>
+    <a href="/admin">📊 管理ダッシュボード</a>
+    <a href="/admin/users">👥 ユーザー管理</a>
+    <a href="/admin/payments">💳 支払い管理</a>
+    <a href="/admin/settings" class="active">⚙️ システム設定</a>
+    <a href="/admin/logs">📈 ログ・統計</a>
+  </aside>
+
+  <main class="container">
+    <h1 style="margin:0 0 6px;font-size:1.4rem;">A-004 システム設定</h1>
+    <p class="muted" style="margin:0 0 14px;">全体設定・API連携・通知・メンテナンス設定を管理します。</p>
+
+    <!-- 全体設定 -->
+    <section class="card">
+      <h2 style="margin:0 0 8px;">全体設定</h2>
+      <div class="row" style="gap:16px">
+        <div style="flex:1;min-width:260px">
+          <label>サイト名</label>
+          <input id="siteName" class="input" value="AI Creator Academy">
+        </div>
+        <div style="flex:1;min-width:260px">
+          <label>既定通貨</label>
+          <select id="currency" class="select">
+            <option>JPY</option><option selected>USD</option><option>AED</option>
+          </select>
+        </div>
+      </div>
+      <hr class="sep">
+      <div class="row" style="justify-content:flex-end">
+        <button class="btn" id="saveGeneral">保存</button>
+      </div>
+    </section>
+
+    <!-- API連携 -->
+    <section class="card" style="margin-top:12px;">
+      <h2 style="margin:0 0 8px;">API 連携</h2>
+      <div class="row" style="gap:16px">
+        <div style="flex:1;min-width:260px">
+          <label>Stripe Secret Key</label>
+          <input id="stripe" class="input" type="password" placeholder="••••••••••••••">
+        </div>
+        <div style="flex:1;min-width:260px">
+          <label>SendGrid API Key</label>
+          <input id="sendgrid" class="input" type="password" placeholder="••••••••••••••">
+        </div>
+      </div>
+      <div style="margin-top:10px">
+        <label>Webhook 受信URL</label>
+        <input id="webhook" class="input" placeholder="https://example.com/api/webhook">
+      </div>
+      <hr class="sep">
+      <div class="row" style="justify-content:flex-end">
+        <button class="btn" id="saveApi">保存</button>
+      </div>
+    </section>
+
+    <!-- 通知設定 -->
+    <section class="card" style="margin-top:12px;">
+      <h2 style="margin:0 0 8px;">通知設定</h2>
+      <label class="switch">
+        <input id="notifyPayment" type="checkbox" checked>
+        <span>決済関連のメール通知を有効化</span>
+      </label>
+      <br>
+      <label class="switch" style="margin-top:6px;">
+        <input id="notifySystem" type="checkbox">
+        <span>システムアラートのメール通知を有効化</span>
+      </label>
+      <hr class="sep">
+      <div class="row" style="justify-content:flex-end">
+        <button class="btn" id="saveNotify">保存</button>
+      </div>
+    </section>
+
+    <!-- メンテナンス -->
+    <section class="card" style="margin-top:12px;">
+      <h2 style="margin:0 0 8px;">メンテナンス</h2>
+      <div class="row">
+        <button class="btn ghost" id="backup">手動バックアップ</button>
+        <button class="btn ghost" id="clearCache">キャッシュクリア</button>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div id="toast" class="toast">保存しました</div>
+
+<script>
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),1600);
+}
+document.getElementById('saveGeneral').onclick=()=>toast('全体設定を保存しました');
+document.getElementById('saveApi').onclick=()=>toast('APIキーを保存しました');
+document.getElementById('saveNotify').onclick=()=>toast('通知設定を保存しました');
+document.getElementById('backup').onclick=()=>toast('バックアップを開始しました（擬似）');
+document.getElementById('clearCache').onclick=()=>toast('キャッシュをクリアしました');
+
+// サイドバーのアクティブ
+(function(){
+  var path = location.pathname.replace(/\/+$/,'');
+  document.querySelectorAll('.sidenav a').forEach(a=>{
+    var href=(a.getAttribute('href')||'').replace(/\/+$/,'');
+    if(href && (href===path || (href!=='/' && path.startsWith(href)))) a.classList.add('active');
+  });
+})();
+</script>
+</body>
+</html>

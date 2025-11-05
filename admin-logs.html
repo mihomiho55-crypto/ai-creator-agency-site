@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A-005 ログ・統計</title>
+<style>
+:root{--b:#e5e7eb;--t:#111827;--m:#6b7280;--bg:#fafafa;--card:#fff;--accent:#111827}
+*{box-sizing:border-box}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif;background:var(--bg);color:var(--t);margin:0}
+/* Header + Logo */
+.app-header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--b)}
+.app-header .inner{max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;align-items:center}
+.logo-container{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-icon{width:32px;height:32px;border-radius:8px;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:800;font-size:.95rem;letter-spacing:.5px}
+.logo{font-weight:800;color:var(--t);font-size:1rem}
+/* Layout */
+.layout{display:grid;grid-template-columns:260px 1fr;gap:20px;max-width:1200px;margin:0 auto;padding:24px}
+@media (max-width:960px){.layout{grid-template-columns:1fr}}
+.sidenav{background:var(--card);border:1px solid var(--b);border-radius:12px;padding:16px;position:sticky;top:16px;height:max-content}
+.sidenav a{display:flex;gap:8px;text-decoration:none;color:var(--t);padding:10px 12px;border-radius:10px;margin:2px 0}
+.sidenav a:hover{background:#f3f4f6}.sidenav a.active{background:var(--accent);color:#fff}
+.container{max-width:900px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--b);border-radius:12px;padding:18px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:900px){.grid-2{grid-template-columns:1fr}}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.muted{color:var(--m)}
+.input,.select{border:1px solid var(--b);border-radius:10px;padding:10px 12px;background:#fff}
+.btn{display:inline-flex;gap:8px;align-items:center;background:var(--accent);color:#fff;border:0;border-radius:999px;padding:10px 16px;font-weight:600;cursor:pointer;text-decoration:none}
+.btn.ghost{background:#374151}
+.table{width:100%;border-collapse:separate;border-spacing:0}
+.table th,.table td{padding:10px 12px;border-bottom:1px solid var(--b);text-align:left;white-space:nowrap}
+.badge{display:inline-block;border-radius:999px;padding:2px 10px;font-weight:700;font-size:.82rem}
+.badge.info{background:#eef2ff;color:#1e40af}
+.badge.warn{background:#fef3c7;color:#92400e}
+.badge.err{background:#fee2e2;color:#991b1b}
+hr.sep{border:none;border-top:1px solid var(--b);margin:14px 0}
+.chart-wrap{position:relative;width:100%;height:320px}
+</style>
+</head>
+<body>
+<header class="app-header">
+  <div class="inner">
+    <a href="/" class="logo-container" aria-label="AI Creator Agency ホーム">
+      <div class="logo-icon">AI</div><div class="logo">Creator Agency</div>
+    </a>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidenav">
+    <h3>管理メニュー</h3>
+    <a href="/admin">📊 管理ダッシュボード</a>
+    <a href="/admin/users">👥 ユーザー管理</a>
+    <a href="/admin/payments">💳 支払い管理</a>
+    <a href="/admin/settings">⚙️ システム設定</a>
+    <a href="/admin/logs" class="active">📈 ログ・統計</a>
+  </aside>
+
+  <main class="container">
+    <h1 style="font-size:1.4rem;margin:0 0 6px;">A-005 ログ・統計</h1>
+    <p class="muted" style="margin:0 0 14px;">アクセス、エラー、監査ログを可視化します（ダミーデータ）。</p>
+
+    <!-- フィルタ -->
+    <section class="card">
+      <div class="row" style="justify-content:space-between">
+        <div class="row">
+          <select id="range" class="select">
+            <option value="7">直近7日</option>
+            <option value="14" selected>直近14日</option>
+            <option value="30">直近30日</option>
+          </select>
+          <select id="product" class="select">
+            <option value="">全プロダクト</option>
+            <option value="course">講座</option>
+            <option value="seminar">セミナー</option>
+            <option value="admin">管理</option>
+          </select>
+          <button id="apply" class="btn">適用</button>
+        </div>
+        <div class="row">
+          <button id="exportCsv" class="btn ghost">CSV 書き出し</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- チャート -->
+    <section class="grid-2" style="margin-top:12px;">
+      <div class="card">
+        <div class="row" style="justify-content:space-between;margin-bottom:8px;">
+          <strong>アクセス推移（PV / ユニーク）</strong>
+          <span class="muted" id="rangeLabel">直近14日</span>
+        </div>
+        <div class="chart-wrap"><canvas id="chartTraffic"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="row" style="justify-content:space-between;margin-bottom:8px;">
+          <strong>エラー内訳</strong>
+          <span class="muted">HTTPステータス別</span>
+        </div>
+        <div class="chart-wrap"><canvas id="chartError"></canvas></div>
+      </div>
+    </section>
+
+    <!-- 監査ログ -->
+    <section class="card" style="margin-top:12px;">
+      <div class="row" style="justify-content:space-between;margin-bottom:8px;">
+        <strong>監査ログ（最新50件）</strong>
+        <span class="muted">操作タイプ別に色分け</span>
+      </div>
+      <div style="overflow:auto;">
+        <table class="table" id="logTable">
+          <thead>
+            <tr>
+              <th>日時</th><th>ユーザー</th><th>操作</th><th>対象</th><th>詳細</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- 軽量CDN（Chart.js） -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+/* ========= ダミーデータ生成 ========= */
+function genDates(n){
+  const arr=[]; const d=new Date();
+  for(let i=n-1;i>=0;i--){
+    const t=new Date(d); t.setDate(d.getDate()-i);
+    const m=String(t.getMonth()+1).padStart(2,'0');
+    const day=String(t.getDate()).padStart(2,'0');
+    arr.push(`${m}/${day}`);
+  }
+  return arr;
+}
+function genTraffic(n){
+  const pv=[], uv=[];
+  let base = 800;
+  for(let i=0;i<n;i++){
+    const noise = Math.round(Math.random()*200-100);
+    const val = Math.max(200, base + noise);
+    pv.push(val);
+    uv.push(Math.max(80, Math.round(val*0.55 + Math.random()*50)));
+    base += Math.round(Math.random()*40-20);
+  }
+  return {pv, uv};
+}
+function genErrors(){
+  // 例：404多め、500/502少なめ
+  return { "200": Math.floor(Math.random()*2000+6000),
+           "404": Math.floor(Math.random()*400+900),
+           "500": Math.floor(Math.random()*60+80),
+           "502": Math.floor(Math.random()*40+50) };
+}
+const AUDIT_ACTIONS = [
+  {type:'info',  text:'ログイン', target:'管理画面', detail:'IP 172.16.0.3'},
+  {type:'warn',  text:'設定変更', target:'通知設定', detail:'メール→ON'},
+  {type:'info',  text:'受講登録', target:'Course #102', detail:'student: hanako'},
+  {type:'info',  text:'支払い',   target:'TX-1006', detail:'Stripe: succeeded'},
+  {type:'err',   text:'失敗決済', target:'TX-1007', detail:'card_authentication_failed'},
+  {type:'info',  text:'返金',     target:'TX-1003', detail:'partial refund'},
+  {type:'warn',  text:'権限変更', target:'user: miki', detail:'teacher → suspended'},
+];
+
+/* ========= チャート描画 ========= */
+let trafficChart=null, errChart=null;
+function drawCharts(days){
+  const labels = genDates(days);
+  const {pv, uv} = genTraffic(days);
+  const errs = genErrors();
+
+  // アクセス推移
+  const ctx1 = document.getElementById('chartTraffic').getContext('2d');
+  if(trafficChart) trafficChart.destroy();
+  trafficChart = new Chart(ctx1, {
+    type:'line',
+    data:{
+      labels,
+      datasets:[
+        { label:'PV', data:pv, borderWidth:2, fill:false, tension:.25 },
+        { label:'ユニーク', data:uv, borderWidth:2, fill:false, tension:.25 }
+      ]
+    },
+    options:{
+      responsive:true,
+      plugins:{ legend:{position:'bottom'} },
+      scales:{ y:{ beginAtZero:true } }
+    }
+  });
+
+  // エラー内訳
+  const ctx2 = document.getElementById('chartError').getContext('2d');
+  if(errChart) errChart.destroy();
+  errChart = new Chart(ctx2, {
+    type:'bar',
+    data:{
+      labels:Object.keys(errs),
+      datasets:[{ label:'件数', data:Object.values(errs) }]
+    },
+    options:{
+      responsive:true,
+      plugins:{ legend:{display:false} },
+      scales:{ y:{ beginAtZero:true } }
+    }
+  });
+}
+
+/* ========= 監査ログ（テーブル） ========= */
+function badge(type){
+  if(type==='info') return '<span class="badge info">INFO</span>';
+  if(type==='warn') return '<span class="badge warn">WARN</span>';
+  return '<span class="badge err">ERROR</span>';
+}
+function renderAudit(){
+  const tbody = document.querySelector('#logTable tbody');
+  const rows=[];
+  const now=new Date();
+  for(let i=0;i<50;i++){
+    const a = AUDIT_ACTIONS[Math.floor(Math.random()*AUDIT_ACTIONS.length)];
+    const t=new Date(now); t.setMinutes(now.getMinutes()-i*7);
+    const ts = `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')} ${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')}`;
+    const user = ['admin','miho','teacher_miki','student_hanako','ops'][Math.floor(Math.random()*5)];
+    rows.push(`<tr>
+      <td>${ts}</td>
+      <td>${user}</td>
+      <td>${badge(a.type)} ${a.text}</td>
+      <td>${a.target}</td>
+      <td>${a.detail}</td>
+    </tr>`);
+  }
+  tbody.innerHTML = rows.join('');
+}
+
+/* ========= CSV エクスポート ========= */
+function exportCSV(){
+  const rows=[['datetime','user','action','target','detail']];
+  document.querySelectorAll('#logTable tbody tr').forEach(tr=>{
+    const cols=[...tr.children].map(td=> `"${td.textContent.replace(/"/g,'""')}"`);
+    rows.push(cols);
+  });
+  const csv = rows.map(r=>r.join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'audit_logs.csv';
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+}
+
+/* ========= フィルタ適用 ========= */
+function apply(){
+  const days = Number(document.getElementById('range').value || 14);
+  const label = document.getElementById('range').selectedOptions[0].textContent;
+  document.getElementById('rangeLabel').textContent = label;
+  drawCharts(days);
+  renderAudit();
+}
+
+document.getElementById('apply').onclick = apply;
+document.getElementById('exportCsv').onclick = exportCSV;
+
+/* 初期表示 */
+apply();
+
+/* サイドバーのアクティブ自動付与（URL一致で強調） */
+(function(){
+  var path = location.pathname.replace(/\/+$/,'');
+  document.querySelectorAll('.sidenav a').forEach(a=>{
+    var href=(a.getAttribute('href')||'').replace(/\/+$/,'');
+    if(href && (href===path || (href!=='/' && path.startsWith(href)))) a.classList.add('active');
+  });
+})();
+</script>
+</body>
+</html>
