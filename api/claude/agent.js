@@ -1,8 +1,9 @@
 // api/claude/agent.js
+// Minimal Claude proxy for static sites on Vercel.
 // POST /api/claude/agent  { prompt, system?, max_tokens?, temperature? }
 
 const MODEL = process.env.ANTHROPIC_MODEL || "claude-3-5-sonnet-latest";
-const ALLOW_ORIGIN = process.env.CORS_ALLOW_ORIGIN || "*";
+const ALLOW_ORIGIN = process.env.CORS_ALLOW_ORIGIN || "*"; // 必要なら自ドメインに変更
 
 function send(res, status, json, extra = {}) {
   res.statusCode = status;
@@ -19,14 +20,18 @@ async function readJson(req) {
     let body = "";
     req.on("data", (c) => (body += c));
     req.on("end", () => {
-      try { resolve(body ? JSON.parse(body) : {}); }
-      catch (e) { reject(e); }
+      try {
+        resolve(body ? JSON.parse(body) : {});
+      } catch (e) {
+        reject(e);
+      }
     });
     req.on("error", reject);
   });
 }
 
 module.exports = async (req, res) => {
+  // CORS preflight
   if (req.method === "OPTIONS") {
     res.setHeader("Access-Control-Allow-Origin", ALLOW_ORIGIN);
     res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
@@ -44,7 +49,13 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const { prompt, system, max_tokens = 400, temperature = 0.7 } = await readJson(req);
+    const {
+      prompt,
+      system,
+      max_tokens = 400,
+      temperature = 0.7,
+    } = await readJson(req);
+
     if (!prompt || typeof prompt !== "string") {
       return send(res, 400, { error: "Missing 'prompt' (string)" });
     }
@@ -63,13 +74,28 @@ module.exports = async (req, res) => {
         system:
           system ||
           "You rewrite and improve social posts for engagement. If input is Japanese, answer in Japanese.",
-        messages: [{ role: "user", content: prompt }],
+        messages: [
+          {
+            role: "user",
+            content: [
+              {
+                type: "text",
+                text: prompt,
+              },
+            ],
+          },
+        ],
       }),
     });
 
     const text = await r.text();
+
     if (!r.ok) {
-      return send(res, r.status, { error: "Anthropic API error", detail: text });
+      // 失敗時はそのまま返してデバッグしやすくする
+      return send(res, r.status, {
+        error: "Anthropic API error",
+        detail: text,
+      });
     }
 
     const data = JSON.parse(text);
