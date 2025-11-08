@@ -1,5 +1,5 @@
 // api/claude/agent.js
-// 超シンプル版 Claude プロキシ
+// Claude Messages API 用の最小プロキシ
 // POST /api/claude/agent  { prompt: "テキスト" }
 
 const MODEL = process.env.ANTHROPIC_MODEL || "claude-3-5-sonnet-latest";
@@ -39,12 +39,10 @@ module.exports = async (req, res) => {
     return res.end();
   }
 
-  // POST 以外は拒否
   if (req.method !== "POST") {
     return send(res, 405, { error: "Use POST /api/claude/agent" });
   }
 
-  // APIキー必須
   if (!process.env.ANTHROPIC_API_KEY) {
     return send(res, 500, { error: "Missing ANTHROPIC_API_KEY" });
   }
@@ -56,7 +54,6 @@ module.exports = async (req, res) => {
       return send(res, 400, { error: "Missing 'prompt' (string)" });
     }
 
-    // Anthropic Messages API への最小リクエスト
     const r = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
@@ -70,8 +67,12 @@ module.exports = async (req, res) => {
         messages: [
           {
             role: "user",
-            // 公式仕様通り：content はプレーン文字列
-            content: prompt,
+            content: [
+              {
+                type: "text",
+                text: prompt,
+              },
+            ],
           },
         ],
       }),
@@ -80,7 +81,6 @@ module.exports = async (req, res) => {
     const text = await r.text();
 
     if (!r.ok) {
-      // エラー内容をそのまま返す（debug用）
       return send(res, r.status, {
         error: "Anthropic API error",
         detail: text,
